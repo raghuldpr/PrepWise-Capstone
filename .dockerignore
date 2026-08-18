@@ -1,0 +1,26 @@
+# Dependencies & Build Outputs
+node_modules/
+dist/
+target/
+backend/target/
+*.log
+
+# Version Control & IDE
+.git/
+.gitignore
+.vscode/
+.idea/
+
+# Environment Variables & Local Secrets
+.env
+.env.*
+!.env.example
+
+# Temporary & Local Media Uploads
+uploads/
+backend/uploads/
+temp/
+
+# OS / Editor generated files
+.DS_Store
+Thumbs.db
