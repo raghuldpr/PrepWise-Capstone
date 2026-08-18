@@ -1,0 +1,82 @@
+@import "tailwindcss";
+
+:root {
+  --bg-canvas: #F7F5F0;
+  --bg-surface: #EFECE6;
+  --bg-surface-alt: #EAE6DF;
+  --text-primary: #111111;
+  --text-secondary: #5E5B56;
+  --border-color: rgba(0, 0, 0, 0.08);
+
+  --primary-cta: #C85232;
+  --primary-cta-hover: #A43A1E;
+  --secondary-accent: #D9603B;
+
+  --font-body: 'Inter', 'Plus Jakarta Sans', 'Geist', system-ui, sans-serif;
+  --font-heading: 'Instrument Sans', 'Plus Jakarta Sans', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Geist Mono', monospace;
+}
+
+.dark {
+  --bg-canvas: #121212;
+  --bg-surface: #1E1E1E;
+  --bg-surface-alt: #242424;
+  --text-primary: #FFFFFF;
+  --text-secondary: #A0A0A0;
+  --border-color: rgba(255, 255, 255, 0.12);
+}
+
+body {
+  background-color: var(--bg-canvas);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+}
+
+.btn-terracotta {
+  background-color: #C85232;
+  color: #FFFFFF;
+  font-size: 15px;
+  font-weight: 650;
+  padding: 12px 24px;
+  border-radius: 8px;
+  border: none;
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  text-decoration: none;
+}
+
+.btn-terracotta:hover {
+  background-color: #A43A1E;
+  color: #FFFFFF;
+}
+
+.btn-secondary-warm {
+  background-color: #EAE6DF;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  color: #111111;
+  font-size: 15px;
+  font-weight: 600;
+  padding: 12px 24px;
+  border-radius: 8px;
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  text-decoration: none;
+}
+
+.card-warm {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  padding: 24px;
+}

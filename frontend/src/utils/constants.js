@@ -1,0 +1,21 @@
+export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api';
+
+export const USER_ROLES = {
+  STUDENT: 'STUDENT',
+  ADMIN: 'ADMIN',
+};
+
+export const INTERVIEW_STATUS = {
+  CREATED: 'CREATED',
+  IN_PROGRESS: 'IN_PROGRESS',
+  COMPLETED: 'COMPLETED',
+  ABANDONED: 'ABANDONED',
+};
+
+export const MODULE_TYPES = {
+  APTITUDE: 'APTITUDE',
+  CODING: 'CODING',
+  DSA: 'DSA',
+  TECHNICAL: 'TECHNICAL',
+  HR: 'HR',
+};
