@@ -1,0 +1,1074 @@
+{
+	"info": {
+		"_postman_id": "prepwise-api-collection-v1",
+		"name": "PrepWise AI API Collection",
+		"description": "Complete Postman collection for PrepWise AI - Covers Authentication, Placement Preparation, Career Hub, Mock Interview, and Progress tracking.",
+		"schema": "https://getpostman.com/schemas/v2.1.0/collection.json"
+	},
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:8080",
+			"type": "string"
+		},
+		{
+			"key": "bearerToken",
+			"value": "",
+			"type": "string"
+		}
+	],
+	"item": [
+		{
+			"name": "1. Authentication",
+			"item": [
+				{
+					"name": "Register User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200 || pm.response.code === 201) {",
+									"    var jsonData = pm.response.json();",
+									"    if (jsonData.token) {",
+									"        pm.collectionVariables.set('bearerToken', jsonData.token);",
+									"        console.log('Bearer token saved to collection variable!');",
+									"    }",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Alex Rivers\",\n  \"email\": \"alex.rivers@example.com\",\n  \"password\": \"SecurePass123!\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/register",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"register"
+							]
+						},
+						"description": "Registers a new student user and stores JWT token in collection variable."
+					},
+					"response": []
+				},
+				{
+					"name": "Login User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    var jsonData = pm.response.json();",
+									"    if (jsonData.token) {",
+									"        pm.collectionVariables.set('bearerToken', jsonData.token);",
+									"        console.log('Bearer token updated successfully!');",
+									"    }",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"alex.rivers@example.com\",\n  \"password\": \"SecurePass123!\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/login",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						},
+						"description": "Authenticates student credentials and automatically stores the JWT token."
+					},
+					"response": []
+				},
+				{
+					"name": "Get User Profile",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearerToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/users/profile",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"profile"
+							]
+						},
+						"description": "Retrieves the authenticated user's profile information."
+					},
+					"response": []
+				},
+				{
+					"name": "Save Onboarding Skills",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearerToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"skills\": [\n    {\n      \"skillId\": 1,\n      \"proficiencyLevel\": \"INTERMEDIATE\"\n    },\n    {\n      \"skillId\": 2,\n      \"proficiencyLevel\": \"ADVANCED\"\n    }\n  ]\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/onboarding/skills",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"onboarding",
+								"skills"
+							]
+						},
+						"description": "Saves student's self-assessed skills during onboarding."
+					},
+					"response": []
+				},
+				{
+					"name": "Save Onboarding Goals",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearerToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"targetRole\": \"Software Development Engineer\",\n  \"college\": \"Stanford University\",\n  \"education\": \"B.S. Computer Science\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/onboarding/goals",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"onboarding",
+								"goals"
+							]
+						},
+						"description": "Saves student target career goals and educational background."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "2. Placement",
+			"item": [
+				{
+					"name": "Get Question Categories",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearerToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/questions/categories",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"questions",
+								"categories"
+							]
+						},
+						"description": "Lists all question categories (Aptitude, Technical, Verbal, Coding)."
+					},
+					"response": []
+				},
+				{
+					"name": "Filter Questions",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearerToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/questions?moduleType=APTITUDE&difficulty=INTERMEDIATE&page=0&size=10",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"questions"
+							],
+							"query": [
+								{
+									"key": "moduleType",
+									"value": "APTITUDE"
+								},
+								{
+									"key": "difficulty",
+									"value": "INTERMEDIATE"
+								},
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "size",
+									"value": "10"
+								}
+							]
+						},
+						"description": "Paginated search & filtering of practice questions."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Question by ID",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearerToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/questions/1?includeAnswers=true",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"questions",
+								"1"
+							],
+							"query": [
+								{
+									"key": "includeAnswers",
+									"value": "true"
+								}
+							]
+						},
+						"description": "Gets details and options for a specific question."
+					},
+					"response": []
+				},
+				{
+					"name": "Submit Question Attempt",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearerToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"questionId\": 1,\n  \"selectedAnswer\": \"102\",\n  \"timeTakenSeconds\": 45\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/attempts",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"attempts"
+							]
+						},
+						"description": "Submits student attempt, computes score and updates skill metrics."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Recent Attempts",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearerToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/attempts/recent",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"attempts",
+								"recent"
+							]
+						},
+						"description": "Retrieves recent question submission logs for the student."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Companies",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearerToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/companies",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"companies"
+							]
+						},
+						"description": "Gets list of hiring companies with prep kits."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Company Preparation Kit",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearerToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/companies/1/preparation",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"companies",
+								"1",
+								"preparation"
+							]
+						},
+						"description": "Retrieves company specific question sets and interview breakdown."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "3. Career Hub",
+			"item": [
+				{
+					"name": "Upload Resume",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearerToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": []
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/resume/upload",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"resume",
+								"upload"
+							]
+						},
+						"description": "Uploads PDF/DOCX resume file."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Resumes",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearerToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/resume",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"resume"
+							]
+						},
+						"description": "Lists user uploaded resumes."
+					},
+					"response": []
+				},
+				{
+					"name": "Analyze Resume",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearerToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/resume/1/analyze",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"resume",
+								"1",
+								"analyze"
+							]
+						},
+						"description": "Triggers AI analysis on an uploaded resume."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Resume Analysis",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearerToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/resume/1/analysis",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"resume",
+								"1",
+								"analysis"
+							]
+						},
+						"description": "Retrieves AI resume analysis result."
+					},
+					"response": []
+				},
+				{
+					"name": "Generate Roadmap",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearerToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"targetRole\": \"Full Stack Engineer\",\n  \"timeframeWeeks\": 12\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/roadmap/generate",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"roadmap",
+								"generate"
+							]
+						},
+						"description": "Generates AI learning roadmap."
+					},
+					"response": []
+				},
+				{
+					"name": "Generate Study Plan",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearerToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"hoursPerWeek\": 15,\n  \"focusAreas\": [\"Data Structures\", \"Spring Boot\", \"System Design\"]\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/study-plan/generate",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"study-plan",
+								"generate"
+							]
+						},
+						"description": "Generates AI tailored weekly study schedule."
+					},
+					"response": []
+				},
+				{
+					"name": "Recommend Projects",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearerToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"domain\": \"Cloud & Microservices\",\n  \"difficulty\": \"INTERMEDIATE\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/projects/recommend",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"projects",
+								"recommend"
+							]
+						},
+						"description": "Recommends portfolio projects based on skill profile."
+					},
+					"response": []
+				},
+				{
+					"name": "Ask AI Assistant",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearerToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"question\": \"What is the time complexity of QuickSort in worst case, and how can we avoid it?\",\n  \"conversationId\": null\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/ai/ask",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"ai",
+								"ask"
+							]
+						},
+						"description": "Queries AI career and technical mentor."
+					},
+					"response": []
+				},
+				{
+					"name": "Analyze Skill Gaps",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearerToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"targetRole\": \"Backend Engineer\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/skills/analyze",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"skills",
+								"analyze"
+							]
+						},
+						"description": "Performs skill gap analysis against desired industry roles."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "4. Mock Interview",
+			"item": [
+				{
+					"name": "Create Mock Interview",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearerToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"title\": \"Java Backend Engineer Interview\",\n  \"targetRole\": \"Java Backend Engineer\",\n  \"interviewType\": \"TECHNICAL\",\n  \"difficulty\": \"INTERMEDIATE\",\n  \"questionCount\": 3\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/interviews",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"interviews"
+							]
+						},
+						"description": "Initializes AI Mock interview and generates adaptive 1st question."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Interview by ID",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearerToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/interviews/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"interviews",
+								"1"
+							]
+						},
+						"description": "Fetches current state of mock interview."
+					},
+					"response": []
+				},
+				{
+					"name": "Answer Interview Question",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearerToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"questionId\": 101,\n  \"answerText\": \"RESTful APIs utilize HTTP verbs like GET for reading and POST for creation, keeping interaction stateless.\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/interviews/1/answer",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"interviews",
+								"1",
+								"answer"
+							]
+						},
+						"description": "Submits candidate answer, receives immediate AI evaluation and adaptive next question."
+					},
+					"response": []
+				},
+				{
+					"name": "Complete Interview",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearerToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/interviews/1/complete",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"interviews",
+								"1",
+								"complete"
+							]
+						},
+						"description": "Concludes interview and synthesizes performance report."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Interview Report",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearerToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/interviews/1/report",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"interviews",
+								"1",
+								"report"
+							]
+						},
+						"description": "Retrieves comprehensive feedback report and score breakdowns."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Interview History",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearerToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/interviews/history",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"interviews",
+								"history"
+							]
+						},
+						"description": "Retrieves past completed and in-progress mock interviews."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "5. Progress",
+			"item": [
+				{
+					"name": "Get Overall User Progress",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearerToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/progress",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"progress"
+							]
+						},
+						"description": "Returns accuracy, attempt counts, and average scores per category."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Progress by Category",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{bearerToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/progress/categories/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"progress",
+								"categories",
+								"1"
+							]
+						},
+						"description": "Returns progress details for a single target category."
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

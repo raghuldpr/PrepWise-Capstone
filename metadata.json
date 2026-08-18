@@ -1,0 +1,6 @@
+{
+  "name": "PrepWise",
+  "description": "AI-powered placement preparation platform with Spring Boot backend architecture, MySQL relational schema, and Warm Editorial Tech React SPA frontend.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
