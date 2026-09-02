@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -46,14 +47,20 @@ public class DefaultAIProviderClient implements AIProviderClient {
     @Value("${GEMINI_API_KEY:}")
     private String geminiApiKeyFallback;
 
-    @Value("${ai.model:${AI_MODEL:gemini-2.5-flash}}")
+    @Value("${ai.model:${AI_MODEL:gemini-1.5-flash}}")
     private String model;
+
+    @Value("${ai.fallback-model:${AI_FALLBACK_MODEL:gemini-2.0-flash}}")
+    private String fallbackModel;
 
     @Value("${ai.api-base-url:${AI_API_BASE_URL:https://generativelanguage.googleapis.com}}")
     private String apiBaseUrl;
 
-    @Value("${ai.timeout-seconds:${AI_TIMEOUT_SECONDS:15}}")
+    @Value("${ai.timeout-seconds:${AI_TIMEOUT_SECONDS:30}}")
     private int timeoutSeconds;
+
+    private static final java.util.regex.Pattern RETRY_IN_PATTERN =
+            java.util.regex.Pattern.compile("retry in ([0-9]+(?:\\.[0-9]+)?)s", java.util.regex.Pattern.CASE_INSENSITIVE);
 
     @Override
     public String complete(String systemPrompt, String userPrompt) {
@@ -99,28 +106,75 @@ public class DefaultAIProviderClient implements AIProviderClient {
     private String executeWithRetry(String systemPrompt, String userPrompt) {
         String effectiveKey = getEffectiveApiKey();
 
+        // 1. Try primary model with retries
         try {
-            return sendApiCall(systemPrompt, userPrompt, effectiveKey);
-        } catch (AIQuotaExceededException | AIProviderUnavailableException e) {
-            throw e;
-        } catch (Exception e) {
-            log.warn("Transient error during AI call. Retrying once... Error: {}", e.getMessage());
-            try {
-                Thread.sleep(500);
-                return sendApiCall(systemPrompt, userPrompt, effectiveKey);
-            } catch (InterruptedException ie) {
-                Thread.currentThread().interrupt();
-                throw new AIProviderUnavailableException("AI Service Temporarily Unavailable — Please try again in a few moments.", ie);
-            } catch (AIQuotaExceededException | AIProviderUnavailableException ex) {
-                throw ex;
-            } catch (Exception ex) {
-                log.error("AI call failed after retry attempt: {}", ex.getMessage());
-                throw new AIProviderUnavailableException("AI Service Temporarily Unavailable — Please try again in a few moments.", ex);
+            return executeModelAttempts(systemPrompt, userPrompt, effectiveKey, model);
+        } catch (AIQuotaExceededException e) {
+            if (fallbackModel != null && !fallbackModel.isBlank() && !fallbackModel.equalsIgnoreCase(model)) {
+                log.warn("Primary model {} quota exceeded/rate limited. Attempting fallback model {}", model, fallbackModel);
+                try {
+                    return executeModelAttempts(systemPrompt, userPrompt, effectiveKey, fallbackModel);
+                } catch (Exception fallbackEx) {
+                    log.error("Fallback model {} call failed: {}", fallbackModel, fallbackEx.getMessage());
+                }
             }
+            throw e;
         }
     }
 
-    private String sendApiCall(String systemPrompt, String userPrompt, String effectiveKey) throws Exception {
+    private String executeModelAttempts(String systemPrompt, String userPrompt, String effectiveKey, String targetModel) {
+        int maxRetries = 3;
+        long waitTimeMs = 1000;
+
+        for (int attempt = 1; attempt <= maxRetries; attempt++) {
+            try {
+                return sendApiCall(systemPrompt, userPrompt, effectiveKey, targetModel);
+            } catch (AIQuotaExceededException e) {
+                Integer retryDelaySec = e.getRetryDelaySeconds();
+                if (retryDelaySec != null && retryDelaySec > 10) {
+                    // Retry delay is long (e.g. >10s). Avoid hammering API; fail fast for fallback/exception handler.
+                    log.warn("Model {} 429 rate limit requires long retry delay ({}s). Stopping attempts for this model.", targetModel, retryDelaySec);
+                    throw e;
+                }
+
+                if (attempt < maxRetries) {
+                    long delayToSleepMs = (retryDelaySec != null && retryDelaySec <= 5) ? (retryDelaySec * 1000L) : waitTimeMs;
+                    log.warn("Model {} Rate limit hit (429). Retrying attempt {}/{} in {} ms...", targetModel, attempt, maxRetries, delayToSleepMs);
+                    try {
+                        Thread.sleep(delayToSleepMs);
+                    } catch (InterruptedException ie) {
+                        Thread.currentThread().interrupt();
+                        throw e;
+                    }
+                    waitTimeMs *= 2;
+                } else {
+                    log.error("Model {} Rate limit persistent after {} attempts.", targetModel, maxRetries);
+                    throw e;
+                }
+            } catch (AIProviderUnavailableException e) {
+                if (attempt < maxRetries) {
+                    log.warn("AI Provider error (Attempt {}/{}). Retrying in {} ms...", attempt, maxRetries, waitTimeMs);
+                    try { Thread.sleep(waitTimeMs); } catch (InterruptedException ie) { Thread.currentThread().interrupt(); throw e; }
+                    waitTimeMs *= 2;
+                } else {
+                    log.error("AI Provider unavailable after {} attempts: {}", maxRetries, e.getMessage());
+                    throw e;
+                }
+            } catch (Exception e) {
+                if (attempt < maxRetries) {
+                    log.warn("Transient error during AI call (Attempt {}/{}): {}. Retrying in {} ms...", attempt, maxRetries, e.getMessage(), waitTimeMs);
+                    try { Thread.sleep(waitTimeMs); } catch (InterruptedException ie) { Thread.currentThread().interrupt(); throw new AIProviderUnavailableException("Interrupted during AI retry wait", ie); }
+                    waitTimeMs *= 2;
+                } else {
+                    log.error("AI call failed after {} attempts: {}", maxRetries, e.getMessage());
+                    throw new AIProviderUnavailableException("AI Service Temporarily Unavailable — Please try again in a few moments.", e);
+                }
+            }
+        }
+        throw new AIProviderUnavailableException("AI Service Temporarily Unavailable — Please try again in a few moments.");
+    }
+
+    private String sendApiCall(String systemPrompt, String userPrompt, String effectiveKey, String targetModel) throws Exception {
         HttpClient httpClient = HttpClient.newBuilder()
                 .connectTimeout(Duration.ofSeconds(timeoutSeconds))
                 .build();
@@ -130,7 +184,7 @@ public class DefaultAIProviderClient implements AIProviderClient {
 
         HttpRequest request;
         if (isGemini) {
-            String url = apiBaseUrl.replaceAll("/+$", "") + "/v1beta/models/" + model + ":generateContent?key=" + effectiveKey;
+            String url = apiBaseUrl.replaceAll("/+$", "") + "/v1beta/models/" + targetModel + ":generateContent?key=" + effectiveKey;
 
             Map<String, Object> bodyMap = new HashMap<>();
             if (systemPrompt != null && !systemPrompt.isBlank()) {
@@ -155,7 +209,7 @@ public class DefaultAIProviderClient implements AIProviderClient {
             String endpoint = baseUrlClean.endsWith("/v1") ? baseUrlClean + "/chat/completions" : baseUrlClean + "/v1/chat/completions";
 
             Map<String, Object> bodyMap = new HashMap<>();
-            bodyMap.put("model", model);
+            bodyMap.put("model", targetModel);
             List<Map<String, String>> messages = new ArrayList<>();
             if (systemPrompt != null && !systemPrompt.isBlank()) {
                 messages.add(Map.of("role", "system", "content", systemPrompt));
@@ -178,12 +232,19 @@ public class DefaultAIProviderClient implements AIProviderClient {
 
         int statusCode = response.statusCode();
         if (statusCode == 429) {
-            throw new AIQuotaExceededException("AI provider quota or rate limit exceeded.");
+            Integer retryDelaySec = parseRetryDelaySeconds(response);
+            log.warn("Gemini API Rate Limit hit (HTTP 429) for model {}. Body: {}. Parsed retryDelay: {}s", targetModel, response.body(), retryDelaySec);
+            String msg = (retryDelaySec != null && retryDelaySec > 0)
+                    ? "AI service rate limit reached. Please try again in " + retryDelaySec + " seconds."
+                    : "AI provider quota or rate limit exceeded.";
+            throw new AIQuotaExceededException(msg, retryDelaySec);
         }
         if (statusCode == 401 || statusCode == 403) {
+            log.error("Gemini API Auth Error (HTTP {}). Body: {}", statusCode, response.body());
             throw new AIProviderUnavailableException("Invalid AI API key or unauthorized access.");
         }
         if (statusCode >= 400) {
+            log.error("Gemini API Error (HTTP {}). Body: {}", statusCode, response.body());
             throw new RuntimeException("AI Provider returned HTTP status " + statusCode + ": " + response.body());
         }
 
@@ -204,6 +265,52 @@ public class DefaultAIProviderClient implements AIProviderClient {
         }
 
         return contentText;
+    }
+
+    private Integer parseRetryDelaySeconds(HttpResponse<String> response) {
+        if (response == null) return null;
+
+        // 1. Check HTTP header Retry-After
+        Optional<String> retryAfterHeader = response.headers().firstValue("Retry-After");
+        if (retryAfterHeader.isPresent()) {
+            try {
+                return Integer.parseInt(retryAfterHeader.get().trim());
+            } catch (NumberFormatException ignored) {}
+        }
+
+        String body = response.body();
+        if (body == null || body.isBlank()) return null;
+
+        try {
+            JsonNode root = objectMapper.readTree(body);
+            JsonNode detailsNode = root.path("error").path("details");
+            if (detailsNode.isArray()) {
+                for (JsonNode detail : detailsNode) {
+                    if (detail.path("@type").asText("").contains("RetryInfo")) {
+                        String retryDelayStr = detail.path("retryDelay").asText("");
+                        if (!retryDelayStr.isBlank()) {
+                            String cleanSec = retryDelayStr.replaceAll("[^0-9]", "");
+                            if (!cleanSec.isBlank()) {
+                                return Integer.parseInt(cleanSec);
+                            }
+                        }
+                    }
+                }
+            }
+
+            String message = root.path("error").path("message").asText("");
+            if (!message.isBlank()) {
+                java.util.regex.Matcher matcher = RETRY_IN_PATTERN.matcher(message);
+                if (matcher.find()) {
+                    double doubleSec = Double.parseDouble(matcher.group(1));
+                    return (int) Math.ceil(doubleSec);
+                }
+            }
+        } catch (Exception e) {
+            log.debug("Failed to parse retry delay from 429 response body", e);
+        }
+
+        return null;
     }
 
     private String getEffectiveApiKey() {
@@ -249,3 +356,4 @@ public class DefaultAIProviderClient implements AIProviderClient {
         }
     }
 }
+

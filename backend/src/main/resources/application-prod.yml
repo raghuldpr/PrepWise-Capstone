@@ -38,7 +38,8 @@ jwt:
 
 ai:
   api-key: ${AI_GEMINI_API_KEY:${GEMINI_API_KEY:}}
-  model: ${AI_MODEL:gemini-2.5-flash}
+  model: ${AI_MODEL:gemini-1.5-flash}
+  fallback-model: ${AI_FALLBACK_MODEL:gemini-2.0-flash}
   api-base-url: ${AI_SERVICE_URL:https://generativelanguage.googleapis.com}
 
 file-storage:

@@ -102,15 +102,19 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(AIQuotaExceededException.class)
     public ResponseEntity<ErrorResponse> handleAIQuotaExceededException(
             AIQuotaExceededException ex, HttpServletRequest request) {
+        String msg = ex.getMessage() != null && !ex.getMessage().isBlank()
+                ? ex.getMessage()
+                : "AI usage is temporarily rate limited. Please try again shortly.";
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .timestamp(LocalDateTime.now())
                 .status(HttpStatus.TOO_MANY_REQUESTS.value())
                 .error(HttpStatus.TOO_MANY_REQUESTS.getReasonPhrase())
-                .message("AI usage is temporarily unavailable")
+                .message(msg)
                 .path(request.getRequestURI())
                 .build();
         return new ResponseEntity<>(errorResponse, HttpStatus.TOO_MANY_REQUESTS);
     }
+
 
     @ExceptionHandler(AIProviderUnavailableException.class)
     public ResponseEntity<ErrorResponse> handleAIProviderUnavailableException(

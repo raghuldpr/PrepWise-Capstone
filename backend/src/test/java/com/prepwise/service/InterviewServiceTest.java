@@ -117,15 +117,10 @@ class InterviewServiceTest {
     @DisplayName("startInterview: calls AIProviderClient to adaptively generate 1st question and sets interview status to IN_PROGRESS")
     void startInterview_usesAIProviderClientToGenerateFirstQuestion() {
         // Arrange
-        CreateInterviewRequest request = CreateInterviewRequest.builder()
-                .targetRole("Backend Engineer")
-                .interviewType(InterviewType.TECHNICAL)
-                .difficulty(Difficulty.MEDIUM)
-                .numberOfQuestions(3)
-                .build();
+        testInterview.setStatus(InterviewStatus.CREATED);
 
-        when(userRepository.findById(1L)).thenReturn(Optional.of(testUser));
-        when(interviewRepository.save(any(Interview.class))).thenReturn(testInterview);
+        when(interviewRepository.findByIdAndUserId(10L, 1L)).thenReturn(Optional.of(testInterview));
+        when(interviewQuestionRepository.findByInterviewIdOrderByQuestionOrderAsc(10L)).thenReturn(List.of());
         when(profileRepository.findByUserId(1L)).thenReturn(Optional.empty());
         when(resumeRepository.findFirstByUserIdOrderByUploadedAtDesc(1L)).thenReturn(Optional.empty());
 
@@ -141,20 +136,19 @@ class InterviewServiceTest {
                 .thenReturn(aiQuestionResponse);
 
         when(interviewQuestionRepository.save(any(InterviewQuestion.class))).thenReturn(firstQuestion);
-        when(interviewMapper.toDto(any(Interview.class))).thenReturn(InterviewDto.builder()
-                .id(10L)
-                .title("Backend Engineer Mock Interview")
-                .status(InterviewStatus.IN_PROGRESS)
-                .questionCount(3)
+        when(interviewQuestionMapper.toDto(any(InterviewQuestion.class))).thenReturn(InterviewQuestionDto.builder()
+                .id(101L)
+                .questionOrder(1)
+                .questionText("What are the core differences between optimistic and pessimistic locking?")
+                .questionType("TECHNICAL")
                 .build());
 
         // Act
-        InterviewDto result = interviewService.createInterview(1L, request);
+        InterviewQuestionDto result = interviewService.startInterview(10L, 1L);
 
         // Assert
         assertThat(result).isNotNull();
-        assertThat(result.getId()).isEqualTo(10L);
-        assertThat(result.getStatus()).isEqualTo(InterviewStatus.IN_PROGRESS);
+        assertThat(result.getId()).isEqualTo(101L);
 
         // Verify AI client was invoked to generate question #1
         ArgumentCaptor<String> userPromptCaptor = ArgumentCaptor.forClass(String.class);

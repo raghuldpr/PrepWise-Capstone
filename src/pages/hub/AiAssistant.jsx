@@ -24,6 +24,7 @@ import {
 } from '../../services/aiService';
 import { getAiErrorMessage } from '../../utils/aiErrorUtils';
 import CareerHubHeader from '../../components/hub/CareerHubHeader';
+import FormattedMarkdown from '../../components/common/FormattedMarkdown';
 
 export default function AiAssistant() {
   const [conversations, setConversations] = useState([]);
@@ -373,9 +374,13 @@ export default function AiAssistant() {
                         : 'bg-[#1E1E1E] text-neutral-200 border border-[#2A2A2A] rounded-tl-none'
                     }`}
                   >
-                    <div className="whitespace-pre-wrap font-body font-normal">
-                      {msg.messageText}
-                    </div>
+                    {isUser ? (
+                      <div className="whitespace-pre-wrap font-body font-normal">
+                        {msg.messageText}
+                      </div>
+                    ) : (
+                      <FormattedMarkdown content={msg.messageText} />
+                    )}
 
                     {!isUser && (
                       <div className="mt-2 pt-2 border-t border-[#2A2A2A] flex items-center justify-between text-[10px] text-neutral-500">
