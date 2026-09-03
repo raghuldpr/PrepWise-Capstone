@@ -1,5 +1,6 @@
 package com.prepwise.dto;
 
+import com.prepwise.entity.ProficiencyLevel;
 import lombok.*;
 
 @Getter
@@ -13,4 +14,5 @@ public class SkillDto {
     private String name;
     private String category;
     private String description;
+    private ProficiencyLevel proficiencyLevel;
 }

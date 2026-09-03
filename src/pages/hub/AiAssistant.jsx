@@ -475,7 +475,7 @@ export default function AiAssistant() {
           </form>
           <div className="flex items-center justify-between mt-2 px-1 text-[10px] text-neutral-500">
             <span>Press Enter to send, Shift + Enter for new line</span>
-            <span className="hidden sm:inline">Powered by Gemini AI Engine</span>
+            <span className="hidden sm:inline">Powered by AI Service</span>
           </div>
         </div>
       </div>

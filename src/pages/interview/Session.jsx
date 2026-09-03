@@ -445,7 +445,7 @@ export default function Session() {
               <div>
                 <div className="flex items-center gap-2">
                   <h3 className="text-sm font-bold text-white font-heading">
-                    Gemini AI Evaluator
+                    AI Evaluator
                   </h3>
                   <span className="text-[10px] px-2 py-0.5 rounded-full bg-[#C85232]/20 text-[#C85232] font-semibold border border-[#C85232]/30">
                     Active
@@ -751,7 +751,7 @@ export default function Session() {
               Evaluating Answer...
             </h3>
             <p className="text-xs text-neutral-400 leading-relaxed">
-              Gemini AI is analyzing technical terminology, correctness, structure, and depth to formulate your real-time score.
+              AI engine is analyzing technical terminology, correctness, structure, and depth to formulate your real-time score.
             </p>
 
             <div className="w-full bg-neutral-800 h-1.5 rounded-full overflow-hidden">

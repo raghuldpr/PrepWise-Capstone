@@ -33,6 +33,8 @@ import CodingSession from './pages/interview/CodingSession';
 import Report from './pages/interview/Report';
 import InterviewComplete from './pages/interview/Complete';
 import History from './pages/interview/History';
+import Profile from './pages/profile/Profile';
+import Settings from './pages/settings/Settings';
 import ProtectedRoute from './components/routing/ProtectedRoute';
 import PublicOnlyRoute from './components/routing/PublicOnlyRoute';
 import OnboardingGate from './components/routing/OnboardingGate';
@@ -208,8 +210,8 @@ export default function App() {
                   <Route path="/interview/setup/type" element={<Setup />} />
                   <Route path="/interview/setup/confirm" element={<Setup />} />
                   <Route path="/progress" element={<Progress />} />
-                  <Route path="/profile" element={<div className="p-4 font-heading text-2xl font-bold">User Profile</div>} />
-                  <Route path="/settings" element={<div className="p-4 font-heading text-2xl font-bold">Settings</div>} />
+                  <Route path="/profile" element={<Profile />} />
+                  <Route path="/settings" element={<Settings />} />
                 </Route>
               </Route>
             </Route>

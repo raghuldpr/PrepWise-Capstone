@@ -44,7 +44,7 @@ public class ResumeService {
     private final ResumeAnalysisMapper resumeAnalysisMapper;
     private final ObjectMapper objectMapper;
 
-    @Value("${ai.model:${AI_MODEL:gemini-1.5-flash}}")
+    @Value("${ai.model:${GROQ_MODEL:${AI_MODEL:qwen/qwen3.8-27b}}}")
     private String aiModelName;
 
     @Value("${resume.upload.max-size-bytes:10485760}")

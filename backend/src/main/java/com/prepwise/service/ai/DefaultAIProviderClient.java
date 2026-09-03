@@ -38,29 +38,29 @@ public class DefaultAIProviderClient implements AIProviderClient {
     private final UserRepository userRepository;
     private final ObjectMapper objectMapper;
 
-    @Value("${ai.provider:${AI_PROVIDER:gemini}}")
+    @Value("${ai.provider:${AI_PROVIDER:groq}}")
     private String provider;
 
-    @Value("${ai.api-key:${AI_API_KEY:}}")
+    @Value("${ai.api-key:${GROQ_API_KEY:${AI_API_KEY:}}}")
     private String apiKey;
 
-    @Value("${GEMINI_API_KEY:}")
-    private String geminiApiKeyFallback;
+    @Value("${GROQ_API_KEY:}")
+    private String groqApiKeyFallback;
 
-    @Value("${ai.model:${AI_MODEL:gemini-1.5-flash}}")
+    @Value("${ai.model:${GROQ_MODEL:${AI_MODEL:qwen/qwen3.8-27b}}}")
     private String model;
 
-    @Value("${ai.fallback-model:${AI_FALLBACK_MODEL:gemini-2.0-flash}}")
+    @Value("${ai.fallback-model:${AI_FALLBACK_MODEL:qwen/qwen3.8-27b}}")
     private String fallbackModel;
 
-    @Value("${ai.api-base-url:${AI_API_BASE_URL:https://generativelanguage.googleapis.com}}")
+    @Value("${ai.api-base-url:${AI_SERVICE_URL:${AI_API_BASE_URL:https://api.groq.com/openai/v1}}}")
     private String apiBaseUrl;
 
     @Value("${ai.timeout-seconds:${AI_TIMEOUT_SECONDS:30}}")
     private int timeoutSeconds;
 
     private static final java.util.regex.Pattern RETRY_IN_PATTERN =
-            java.util.regex.Pattern.compile("retry in ([0-9]+(?:\\.[0-9]+)?)s", java.util.regex.Pattern.CASE_INSENSITIVE);
+            java.util.regex.Pattern.compile("(?:retry|try again|please wait)?\\s*(?:in)?\\s*([0-9]+(?:\\.[0-9]+)?)\\s*s(?:econds?)?", java.util.regex.Pattern.CASE_INSENSITIVE);
 
     @Override
     public String complete(String systemPrompt, String userPrompt) {
@@ -206,7 +206,14 @@ public class DefaultAIProviderClient implements AIProviderClient {
                     .build();
         } else {
             String baseUrlClean = apiBaseUrl.replaceAll("/+$", "");
-            String endpoint = baseUrlClean.endsWith("/v1") ? baseUrlClean + "/chat/completions" : baseUrlClean + "/v1/chat/completions";
+            String endpoint;
+            if (baseUrlClean.endsWith("/chat/completions")) {
+                endpoint = baseUrlClean;
+            } else if (baseUrlClean.endsWith("/v1")) {
+                endpoint = baseUrlClean + "/chat/completions";
+            } else {
+                endpoint = baseUrlClean + "/v1/chat/completions";
+            }
 
             Map<String, Object> bodyMap = new HashMap<>();
             bodyMap.put("model", targetModel);
@@ -233,18 +240,18 @@ public class DefaultAIProviderClient implements AIProviderClient {
         int statusCode = response.statusCode();
         if (statusCode == 429) {
             Integer retryDelaySec = parseRetryDelaySeconds(response);
-            log.warn("Gemini API Rate Limit hit (HTTP 429) for model {}. Body: {}. Parsed retryDelay: {}s", targetModel, response.body(), retryDelaySec);
+            log.warn("AI Provider Rate Limit hit (HTTP 429) for model {}. Body: {}. Parsed retryDelay: {}s", targetModel, response.body(), retryDelaySec);
             String msg = (retryDelaySec != null && retryDelaySec > 0)
                     ? "AI service rate limit reached. Please try again in " + retryDelaySec + " seconds."
                     : "AI provider quota or rate limit exceeded.";
             throw new AIQuotaExceededException(msg, retryDelaySec);
         }
         if (statusCode == 401 || statusCode == 403) {
-            log.error("Gemini API Auth Error (HTTP {}). Body: {}", statusCode, response.body());
+            log.error("AI Provider Auth Error (HTTP {}). Body: {}", statusCode, response.body());
             throw new AIProviderUnavailableException("Invalid AI API key or unauthorized access.");
         }
         if (statusCode >= 400) {
-            log.error("Gemini API Error (HTTP {}). Body: {}", statusCode, response.body());
+            log.error("AI Provider Error (HTTP {}). Body: {}", statusCode, response.body());
             throw new RuntimeException("AI Provider returned HTTP status " + statusCode + ": " + response.body());
         }
 
@@ -257,9 +264,13 @@ public class DefaultAIProviderClient implements AIProviderClient {
             }
             contentText = textNode.asText();
         } else {
-            JsonNode textNode = rootNode.path("choices").get(0).path("message").path("content");
+            JsonNode choicesNode = rootNode.path("choices");
+            if (!choicesNode.isArray() || choicesNode.isEmpty()) {
+                throw new AIProviderUnavailableException("Invalid response format from Groq AI provider.");
+            }
+            JsonNode textNode = choicesNode.get(0).path("message").path("content");
             if (textNode.isMissingNode() || textNode.isNull()) {
-                throw new AIProviderUnavailableException("Invalid response format from OpenAI AI provider.");
+                throw new AIProviderUnavailableException("Invalid response format from Groq AI provider.");
             }
             contentText = textNode.asText();
         }
@@ -276,6 +287,21 @@ public class DefaultAIProviderClient implements AIProviderClient {
             try {
                 return Integer.parseInt(retryAfterHeader.get().trim());
             } catch (NumberFormatException ignored) {}
+        }
+
+        // 2. Check x-ratelimit-reset header if present
+        Optional<String> resetHeader = response.headers().firstValue("x-ratelimit-reset-requests");
+        if (resetHeader.isEmpty()) {
+            resetHeader = response.headers().firstValue("x-ratelimit-reset-tokens");
+        }
+        if (resetHeader.isPresent()) {
+            try {
+                String val = resetHeader.get().trim();
+                if (val.matches("^[0-9]+(?:\\.[0-9]+)?s?$")) {
+                    double s = Double.parseDouble(val.replaceAll("[^0-9.]", ""));
+                    return (int) Math.ceil(s);
+                }
+            } catch (Exception ignored) {}
         }
 
         String body = response.body();
@@ -314,8 +340,8 @@ public class DefaultAIProviderClient implements AIProviderClient {
     }
 
     private String getEffectiveApiKey() {
-        String key = apiKey != null && !apiKey.isBlank() ? apiKey : geminiApiKeyFallback;
-        if (key == null || key.isBlank() || key.equals("MY_GEMINI_API_KEY")) {
+        String key = apiKey != null && !apiKey.isBlank() ? apiKey : groqApiKeyFallback;
+        if (key == null || key.isBlank() || key.contains("your_") || key.equals("MY_GROQ_API_KEY") || key.equals("MY_GEMINI_API_KEY")) {
             throw new AIProviderUnavailableException("AI API Key is missing or not configured.");
         }
         return key;

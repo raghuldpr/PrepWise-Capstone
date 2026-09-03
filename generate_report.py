@@ -170,7 +170,7 @@ def create_document():
         "Modern technical interview preparation is often fragmented, lacking real-time customized evaluation and feedback. "
         "Candidates struggle with unstructured study materials, inconsistent mock interviews, and opaque skill gap assessments. "
         "PrepWise addresses this challenge by delivering an enterprise-grade, full-stack AI-powered technical interview preparation system. "
-        "The application integrates Google Gemini AI to simulate realistic technical coding and behavioral interview sessions, parse candidate resumes, "
+        "The application integrates Groq AI (Qwen3.8-27B) to simulate realistic technical coding and behavioral interview sessions, parse candidate resumes, "
         "generate tailored question banks, and track progress across aptitude, data structures, algorithms, and domain-specific topics."
     )
     
@@ -193,7 +193,7 @@ def create_document():
         r.font.color.rgb = RGBColor(0xFF, 0xFF, 0xFF)
         
     req_rows = [
-        ("FR-01", "AI Interview Simulation", "Real-time AI mock interview engine using Google Gemini API to generate contextual questions and evaluate user responses."),
+        ("FR-01", "AI Interview Simulation", "Real-time AI mock interview engine using Groq API (Qwen3.8-27B) to generate contextual questions and evaluate user responses."),
         ("FR-02", "Resume Parsing & Skill Gap", "Automated extraction of technical skills from uploaded PDF/Word resumes mapped against domain requirements."),
         ("NFR-01", "Security & Authentication", "Stateless JWT authentication, password BCrypt hashing, and role-based access control implemented via Spring Security."),
         ("NFR-02", "Containerized Portability", "Multi-stage Docker builds ensuring zero-dependency local deployment across development and production environments.")
@@ -232,7 +232,7 @@ def create_document():
         "                                                              │\n"
         "                                       ┌──────────────────────┴──────────────────────┐\n"
         "                                       ▼                                             ▼\n"
-        "                              [prepwise-db] (MySQL 8.0)                     [Google Gemini AI API]\n"
+        "                              [prepwise-db] (MySQL 8.0)                     [Groq AI API / Qwen3.8-27B]\n"
         "                              (Port 3307:3306)                              (REST Integration)"
     )
 

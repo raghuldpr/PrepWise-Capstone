@@ -1,5 +1,5 @@
 server:
-  port: ${SERVER_PORT:8080}
+  port: ${PORT:${SERVER_PORT:8080}}
   error:
     include-stacktrace: never
     include-message: never
@@ -13,9 +13,9 @@ spring:
   application:
     name: prepwise-backend
   datasource:
-    url: jdbc:mysql://${DB_HOST}:${DB_PORT:3306}/${DB_NAME}?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
+    url: ${SPRING_DATASOURCE_URL:${DATABASE_URL:jdbc:mysql://${DB_HOST}:${DB_PORT:3306}/${DB_NAME}?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC}}
+    username: ${SPRING_DATASOURCE_USERNAME:${DB_USERNAME}}
+    password: ${SPRING_DATASOURCE_PASSWORD:${DB_PASSWORD}}
     driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
       maximum-pool-size: ${DB_POOL_MAX_SIZE:10}
@@ -37,10 +37,11 @@ jwt:
   expiration: ${JWT_EXPIRATION:86400000}
 
 ai:
-  api-key: ${AI_GEMINI_API_KEY:${GEMINI_API_KEY:}}
-  model: ${AI_MODEL:gemini-1.5-flash}
-  fallback-model: ${AI_FALLBACK_MODEL:gemini-2.0-flash}
-  api-base-url: ${AI_SERVICE_URL:https://generativelanguage.googleapis.com}
+  provider: ${AI_PROVIDER:groq}
+  api-key: ${GROQ_API_KEY:${AI_API_KEY:}}
+  model: ${GROQ_MODEL:${AI_MODEL:qwen/qwen3.8-27b}}
+  fallback-model: ${AI_FALLBACK_MODEL:qwen/qwen3.8-27b}
+  api-base-url: ${AI_SERVICE_URL:https://api.groq.com/openai/v1}
 
 file-storage:
   type: ${FILE_STORAGE_TYPE:local}

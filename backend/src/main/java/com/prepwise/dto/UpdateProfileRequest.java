@@ -1,22 +1,17 @@
 package com.prepwise.dto;
 
-import com.prepwise.entity.Role;
 import lombok.*;
 
-import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UserProfileResponse {
+public class UpdateProfileRequest {
 
-    private Long id;
     private String name;
-    private String email;
-    private Role role;
-    private Boolean onboardingCompleted;
     private String phone;
     private String avatarUrl;
     private String degree;
@@ -41,7 +36,5 @@ public class UserProfileResponse {
     private String settingsData;
     private String careerGoal;
     private String bio;
-    private java.util.List<SkillDto> skills;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+    private List<UserSkillSelectionDto> skills;
 }

@@ -238,7 +238,7 @@ export default function Report() {
             </div>
 
             <p className="text-xs text-neutral-400 mt-3 leading-relaxed max-w-xs">
-              Based on Gemini AI analysis across technical accuracy, problem formulation, and communication clarity.
+              Based on AI analysis across technical accuracy, problem formulation, and communication clarity.
             </p>
           </div>
 

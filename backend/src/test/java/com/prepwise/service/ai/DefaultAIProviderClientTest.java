@@ -35,29 +35,23 @@ class DefaultAIProviderClientTest {
         objectMapper = new ObjectMapper();
         client = new DefaultAIProviderClient(aiRequestRepository, userRepository, objectMapper);
 
-        setField(client, "provider", "gemini");
-        setField(client, "apiKey", "test-api-key");
-        setField(client, "model", "gemini-1.5-flash");
-        setField(client, "fallbackModel", "gemini-2.0-flash");
-        setField(client, "apiBaseUrl", "https://generativelanguage.googleapis.com");
+        setField(client, "provider", "groq");
+        setField(client, "apiKey", "test-groq-api-key");
+        setField(client, "model", "qwen/qwen3.8-27b");
+        setField(client, "fallbackModel", "qwen/qwen3.8-27b");
+        setField(client, "apiBaseUrl", "https://api.groq.com/openai/v1");
         setField(client, "timeoutSeconds", 30);
     }
 
     @Test
-    @DisplayName("Should parse retryDelay from Gemini 429 response body")
+    @DisplayName("Should parse retryDelay from Groq 429 response body and headers")
     void testParseRetryDelayFromResponseBody() throws Exception {
         String jsonBody = """
                 {
                   "error": {
-                    "code": 429,
-                    "message": "Quota exceeded. Please retry in 25.231066666s.",
-                    "status": "RESOURCE_EXHAUSTED",
-                    "details": [
-                      {
-                        "@type": "type.googleapis.com/google.rpc.RetryInfo",
-                        "retryDelay": "25s"
-                      }
-                    ]
+                    "message": "Rate limit reached for model qwen/qwen3.8-27b. Please try again in 12.5s.",
+                    "type": "tokens",
+                    "code": "rate_limit_exceeded"
                   }
                 }
                 """;
@@ -72,7 +66,22 @@ class DefaultAIProviderClientTest {
         Integer retryDelaySec = (Integer) parseMethod.invoke(client, mockResponse);
 
         assertNotNull(retryDelaySec);
-        assertEquals(25, retryDelaySec);
+        assertEquals(13, retryDelaySec);
+    }
+
+    @Test
+    @DisplayName("Should parse retryDelay from Retry-After header")
+    void testParseRetryDelayFromHeader() throws Exception {
+        @SuppressWarnings("unchecked")
+        HttpResponse<String> mockResponse = mock(HttpResponse.class);
+        when(mockResponse.headers()).thenReturn(java.net.http.HttpHeaders.of(java.util.Map.of("Retry-After", java.util.List.of("15")), (k, v) -> true));
+
+        Method parseMethod = DefaultAIProviderClient.class.getDeclaredMethod("parseRetryDelaySeconds", HttpResponse.class);
+        parseMethod.setAccessible(true);
+        Integer retryDelaySec = (Integer) parseMethod.invoke(client, mockResponse);
+
+        assertNotNull(retryDelaySec);
+        assertEquals(15, retryDelaySec);
     }
 
     @Test

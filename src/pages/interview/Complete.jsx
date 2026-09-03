@@ -62,7 +62,7 @@ export default function Complete() {
             Interview Completed!
           </h1>
           <p className="text-xs text-neutral-400 leading-relaxed max-w-xs mx-auto">
-            Great job finishing your practice session. Gemini AI has processed your responses and computed your candidate score.
+            Great job finishing your practice session. AI engine has processed your responses and computed your candidate score.
           </p>
         </div>
 

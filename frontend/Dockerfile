@@ -1,7 +1,6 @@
 # Stage 1: Build the React application
 FROM node:20-alpine AS build
 
-# Set working directory
 WORKDIR /app
 
 # Copy package manifests first to leverage Docker layer caching
@@ -14,7 +13,6 @@ RUN npm ci
 COPY tsconfig.json vite.config.ts index.html ./
 COPY src/ ./src/
 COPY frontend/ ./frontend/
-COPY assets/ ./assets/
 
 # Build static production bundle
 RUN npm run build

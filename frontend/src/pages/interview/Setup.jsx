@@ -627,7 +627,7 @@ export default function Setup() {
           <div className="p-4 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-700 dark:text-amber-300 text-xs flex items-start gap-3 leading-relaxed">
             <Sparkles size={16} className="shrink-0 mt-0.5" />
             <div>
-              Our Gemini AI engine will dynamically adapt questions based on your performance in real time. Make sure your microphone or editor is ready!
+              Our AI engine will dynamically adapt questions based on your performance in real time. Make sure your microphone or editor is ready!
             </div>
           </div>
 
