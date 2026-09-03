@@ -3,10 +3,14 @@ FROM maven:3.9-eclipse-temurin-17 AS build
 
 WORKDIR /app
 
-# Copy backend pom.xml and source code from repo root context
-# Render manual services use repo root as Docker context
-COPY backend/pom.xml ./pom.xml
-COPY backend/src ./src
+# Copy pom.xml first for dependency caching
+COPY pom.xml ./
+
+# Download dependencies (separate layer for caching)
+RUN mvn dependency:go-offline -B || true
+
+# Copy source code
+COPY src ./src
 
 # Build the application
 RUN mvn clean package -DskipTests -B -e
