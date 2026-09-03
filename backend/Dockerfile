@@ -22,7 +22,7 @@ RUN mkdir -p /var/app/uploads && chown -R spring:spring /var/app/uploads
 WORKDIR /app
 
 # Copy compiled JAR file from builder stage
-COPY --from=build /app/target/*.jar app.jar
+COPY --from=build /app/target/app.jar app.jar
 
 # Switch to non-root user
 USER spring:spring
