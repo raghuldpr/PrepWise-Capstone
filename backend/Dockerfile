@@ -12,10 +12,7 @@ COPY backend/src ./src
 RUN mvn clean package -DskipTests -B -e
 
 # Verify the JAR contains the main class (fail-fast)
-RUN echo "=== Verifying JAR contents ===" && \
-    jar tf target/app.jar | grep "PrepWiseApplication" && \
-    unzip -p target/app.jar META-INF/MANIFEST.MF && \
-    echo "=== JAR verification PASSED ==="
+RUN jar tf target/app.jar | grep "PrepWiseApplication" && echo "JAR verification PASSED"
 
 # Stage 2: Production JRE runtime image
 FROM eclipse-temurin:17-jre
