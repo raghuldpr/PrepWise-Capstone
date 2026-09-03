@@ -201,6 +201,7 @@ public class DefaultAIProviderClient implements AIProviderClient {
             request = HttpRequest.newBuilder()
                     .uri(URI.create(url))
                     .header("Content-Type", "application/json")
+                    .header("User-Agent", "PrepWise-Backend/1.0")
                     .timeout(Duration.ofSeconds(timeoutSeconds))
                     .POST(HttpRequest.BodyPublishers.ofString(jsonPayload))
                     .build();
@@ -230,6 +231,7 @@ public class DefaultAIProviderClient implements AIProviderClient {
                     .uri(URI.create(endpoint))
                     .header("Content-Type", "application/json")
                     .header("Authorization", "Bearer " + effectiveKey)
+                    .header("User-Agent", "PrepWise-Backend/1.0")
                     .timeout(Duration.ofSeconds(timeoutSeconds))
                     .POST(HttpRequest.BodyPublishers.ofString(jsonPayload))
                     .build();
