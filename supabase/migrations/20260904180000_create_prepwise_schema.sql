@@ -528,11 +528,6 @@ ON CONFLICT (id) DO NOTHING;
 
 -- ===================================================================
 -- PrepWise Comprehensive Technical & Aptitude Skills Seed (27 Skills)
--- Grouped into clean categories for Onboarding & Profile Management
--- ===================================================================
-
--- ===================================================================
--- PrepWise Comprehensive Technical & Aptitude Skills Seed (27 Skills)
 -- Safely upserts on unique constraint 'name' without ID collision
 -- ===================================================================
 

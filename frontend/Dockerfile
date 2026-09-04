@@ -12,6 +12,7 @@ RUN npm ci
 # Copy source code and configuration files required for Vite build
 COPY tsconfig.json vite.config.ts index.html ./
 COPY src/ ./src/
+COPY public/ ./public/
 COPY frontend/ ./frontend/
 
 # Build static production bundle

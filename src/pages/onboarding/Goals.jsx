@@ -100,9 +100,12 @@ export const Goals = () => {
       {/* Header */}
       <header className="flex justify-between items-center max-w-4xl mx-auto w-full">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-lg bg-[#C85232] flex items-center justify-center text-white font-bold text-xl shadow-xs">
-            P
-          </div>
+          <img
+            src="/apple-touch-icon.png"
+            alt="PrepWise"
+            className="w-10 h-10 rounded-xl object-contain shadow-xs shrink-0"
+            onError={(e) => { e.currentTarget.src = '/favicon-32x32.png'; }}
+          />
           <span className="font-extrabold text-2xl tracking-tight text-[#111111] dark:text-white font-heading">
             PrepWise
           </span>

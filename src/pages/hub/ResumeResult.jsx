@@ -131,42 +131,42 @@ export default function ResumeResult() {
       </div>
 
       {/* Hero Score Card */}
-      <div className="bg-[#1E1E1E] border border-[#2E2E2E] rounded-2xl p-6 sm:p-8 text-white relative overflow-hidden shadow-xl">
+      <div className="bg-[#EFECE6] dark:bg-[#1E1E1E] border border-[rgba(0,0,0,0.08)] dark:border-[#2E2E2E] rounded-2xl p-6 sm:p-8 text-[#111111] dark:text-white relative overflow-hidden shadow-sm">
         <div className="absolute -right-12 -bottom-12 w-48 h-48 bg-[#C85232]/10 rounded-full blur-3xl pointer-events-none"></div>
 
         <div className="flex flex-col md:flex-row items-center justify-between gap-6 relative z-10">
           {/* File & Details */}
           <div className="space-y-3 text-center md:text-left flex-1">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#C85232]/20 border border-[#C85232]/30 text-[#C85232] font-semibold text-xs">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#C85232]/15 border border-[#C85232]/30 text-[#C85232] font-semibold text-xs">
               <Sparkles size={14} />
               <span>AI Evaluation Report</span>
             </div>
-            <h1 className="text-2xl sm:text-3xl font-bold font-heading text-white">
+            <h1 className="text-2xl sm:text-3xl font-bold font-heading text-[#111111] dark:text-white">
               {resume?.originalFilename || 'Resume Analysis Result'}
             </h1>
-            <p className="text-xs sm:text-sm text-neutral-400">
+            <p className="text-xs sm:text-sm text-[#5E5B56] dark:text-neutral-400">
               Evaluated on {analysis.createdAt ? new Date(analysis.createdAt).toLocaleDateString() : 'Today'}
             </p>
           </div>
 
           {/* Radial Score Gauge */}
-          <div className="flex flex-col items-center shrink-0 bg-[#121212] border border-[#2E2E2E] p-6 rounded-2xl w-full md:w-56 text-center shadow-inner">
-            <div className="text-[10px] font-bold uppercase tracking-wider text-neutral-400 mb-1">
+          <div className="flex flex-col items-center shrink-0 bg-[#EAE6DF] dark:bg-[#121212] border border-[rgba(0,0,0,0.08)] dark:border-[#2E2E2E] p-6 rounded-2xl w-full md:w-56 text-center shadow-inner">
+            <div className="text-[10px] font-bold uppercase tracking-wider text-[#5E5B56] dark:text-neutral-400 mb-1">
               Overall Resume Score
             </div>
 
             <div className="relative my-2 flex items-center justify-center">
-              <span className="text-4xl font-extrabold font-heading text-white">
+              <span className="text-4xl font-extrabold font-heading text-[#111111] dark:text-white">
                 {overallScore}
               </span>
-              <span className="text-xs text-neutral-500 ml-1 font-bold">/100</span>
+              <span className="text-xs text-[#5E5B56] dark:text-neutral-500 ml-1 font-bold">/100</span>
             </div>
 
             <div className={`mt-1 px-3 py-1 rounded-full text-[11px] font-bold border ${scoreColor}`}>
               {scoreBadgeText}
             </div>
 
-            <p className="text-[10px] text-neutral-400 mt-2 leading-tight">
+            <p className="text-[10px] text-[#5E5B56] dark:text-neutral-400 mt-2 leading-tight">
               {scoreDescription}
             </p>
           </div>
@@ -176,7 +176,7 @@ export default function ResumeResult() {
       {/* Grid of Structured Insight Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Strengths Card */}
-        <div className="bg-white dark:bg-[#1A1A1A] border border-[rgba(0,0,0,0.08)] dark:border-[#2A2A2A] rounded-2xl p-6 shadow-sm">
+        <div className="bg-[#EFECE6] dark:bg-[#1A1A1A] border border-[rgba(0,0,0,0.08)] dark:border-[#2A2A2A] rounded-2xl p-6 shadow-xs">
           <div className="flex items-center gap-2.5 pb-4 border-b border-[rgba(0,0,0,0.06)] dark:border-[#2A2A2A]">
             <div className="w-8 h-8 rounded-lg bg-emerald-100 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0 font-bold">
               <CheckCircle2 size={18} />
@@ -202,7 +202,7 @@ export default function ResumeResult() {
         </div>
 
         {/* Weaknesses Card */}
-        <div className="bg-white dark:bg-[#1A1A1A] border border-[rgba(0,0,0,0.08)] dark:border-[#2A2A2A] rounded-2xl p-6 shadow-sm">
+        <div className="bg-[#EFECE6] dark:bg-[#1A1A1A] border border-[rgba(0,0,0,0.08)] dark:border-[#2A2A2A] rounded-2xl p-6 shadow-xs">
           <div className="flex items-center gap-2.5 pb-4 border-b border-[rgba(0,0,0,0.06)] dark:border-[#2A2A2A]">
             <div className="w-8 h-8 rounded-lg bg-rose-100 dark:bg-rose-950/50 text-rose-600 dark:text-rose-400 flex items-center justify-center shrink-0 font-bold">
               <XCircle size={18} />
@@ -228,7 +228,7 @@ export default function ResumeResult() {
         </div>
 
         {/* Missing Skills Card */}
-        <div className="bg-white dark:bg-[#1A1A1A] border border-[rgba(0,0,0,0.08)] dark:border-[#2A2A2A] rounded-2xl p-6 shadow-sm">
+        <div className="bg-[#EFECE6] dark:bg-[#1A1A1A] border border-[rgba(0,0,0,0.08)] dark:border-[#2A2A2A] rounded-2xl p-6 shadow-xs">
           <div className="flex items-center gap-2.5 pb-4 border-b border-[rgba(0,0,0,0.06)] dark:border-[#2A2A2A]">
             <div className="w-8 h-8 rounded-lg bg-amber-100 dark:bg-amber-950/50 text-amber-600 dark:text-amber-400 flex items-center justify-center shrink-0 font-bold">
               <AlertTriangle size={18} />
@@ -256,7 +256,7 @@ export default function ResumeResult() {
         </div>
 
         {/* Suggestions Card */}
-        <div className="bg-white dark:bg-[#1A1A1A] border border-[rgba(0,0,0,0.08)] dark:border-[#2A2A2A] rounded-2xl p-6 shadow-sm">
+        <div className="bg-[#EFECE6] dark:bg-[#1A1A1A] border border-[rgba(0,0,0,0.08)] dark:border-[#2A2A2A] rounded-2xl p-6 shadow-xs">
           <div className="flex items-center gap-2.5 pb-4 border-b border-[rgba(0,0,0,0.06)] dark:border-[#2A2A2A]">
             <div className="w-8 h-8 rounded-lg bg-[#C85232]/10 text-[#C85232] flex items-center justify-center shrink-0 font-bold">
               <Lightbulb size={18} />

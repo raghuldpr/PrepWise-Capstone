@@ -25,8 +25,8 @@ graph TD
     Client[Browser / Client] -->|Port 3000| Nginx[prepwise-frontend / Nginx Web Server]
     Nginx -->|Serves Static Build| SPA[React 19 + Vite App]
     Nginx -->|Reverse Proxy /api/*| Backend[prepwise-backend / Spring Boot 3.2]
-    Backend -->|JDBC Port 3306| Database[(prepwise-db / MySQL 8.0)]
-    Backend -->|REST API| Groq[Groq AI API / Qwen3.8-27B]
+    Backend -->|JDBC Port 5432 / SSL| Database[(prepwise-db / Supabase PostgreSQL)]
+    Backend -->|REST API| Groq[Groq Cloud AI API / Qwen3.8-27B]
     Backend -->|Local Volume| Uploads[/var/app/uploads / Volume]
 ```
 
@@ -36,7 +36,7 @@ graph TD
 | :--- | :--- | :--- | :--- | :--- | :--- |
 | `prepwise-frontend` | Web Server / Reverse Proxy | React 19 + Nginx | `3000:80` | `node:20-alpine` → `nginx:1.27-alpine` | Yes |
 | `prepwise-backend` | REST API Backend | Java 17 + Spring Boot | `8080:8080` | `maven:3.9-alpine` → `eclipse-temurin:17-jre-alpine` | Yes |
-| `prepwise-db` | Database Server | MySQL 8.0 | `3306:3306` | `mysql:8.0` | N/A |
+| `prepwise-db` | Database Server | PostgreSQL 16 (Supabase Compatible) | `5432:5432` | `postgres:16-alpine` | N/A |
 
 ---
 
@@ -50,8 +50,8 @@ graph TD
    - Read-only database initialization mounts (`:ro`).
    - Minimal attack surface via Alpine Linux distributions.
 3. **Orchestration & Healthchecks**:
-   - MySQL healthcheck (`mysqladmin ping`) guarantees database readiness before backend startup.
-   - Persistent volumes for MySQL data (`prepwise_db_data`) and document uploads (`prepwise_uploads_data`).
+   - PostgreSQL healthcheck (`pg_isready`) guarantees database readiness before backend startup.
+   - Persistent volumes for PostgreSQL data (`prepwise_pg_data`) and document uploads (`prepwise_uploads_data`).
 
 ---
 
@@ -118,7 +118,7 @@ This repository follows Git-Flow best practices with feature branching and clean
 |/  
 *   merge: implement full-stack Docker multi-container architecture
 |\  
-| * feat(docker): add docker-compose orchestration for MySQL, backend, and frontend
+| * feat(docker): add docker-compose orchestration for PostgreSQL, backend, and frontend
 | * feat(docker): add multi-stage Dockerfile for Spring Boot backend
 | * feat(docker): add multi-stage Dockerfile for React frontend and custom Nginx SPA routing (feature/docker-containerization)
 |/  
@@ -130,7 +130,7 @@ This repository follows Git-Flow best practices with feature branching and clean
 |\  
 | * feat(backend): configure Spring Boot backend application yml profiles and Maven POM (feature/backend-spring-boot)
 |/  
-*   merge: incorporate MySQL database schema and seed configuration
+*   merge: incorporate Supabase PostgreSQL database schema and seed configuration
 |\  
 | * feat(db): add database schema and seed data for PrepWise (feature/database-setup)
 |/  

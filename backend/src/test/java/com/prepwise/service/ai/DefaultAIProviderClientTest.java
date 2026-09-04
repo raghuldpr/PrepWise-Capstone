@@ -37,10 +37,17 @@ class DefaultAIProviderClientTest {
 
         setField(client, "provider", "groq");
         setField(client, "apiKey", "test-groq-api-key");
-        setField(client, "model", "qwen/qwen3.8-27b");
+        setField(client, "model", "qwen/qwen3.6-27b");
         setField(client, "fallbackModel", "qwen/qwen3.8-27b");
         setField(client, "apiBaseUrl", "https://api.groq.com/openai/v1");
         setField(client, "timeoutSeconds", 30);
+    }
+
+    @Test
+    @DisplayName("Should return configured provider and model")
+    void testGetProviderAndModel() {
+        assertEquals("groq", client.getProvider());
+        assertEquals("qwen/qwen3.6-27b", client.getModel());
     }
 
     @Test
@@ -49,7 +56,7 @@ class DefaultAIProviderClientTest {
         String jsonBody = """
                 {
                   "error": {
-                    "message": "Rate limit reached for model qwen/qwen3.8-27b. Please try again in 12.5s.",
+                    "message": "Rate limit reached for model qwen/qwen3.6-27b. Please try again in 12.5s.",
                     "type": "tokens",
                     "code": "rate_limit_exceeded"
                   }
@@ -90,6 +97,43 @@ class DefaultAIProviderClientTest {
         AIQuotaExceededException ex = new AIQuotaExceededException("Rate limit hit", 25);
         assertEquals(25, ex.getRetryDelaySeconds());
         assertEquals("Rate limit hit", ex.getMessage());
+    }
+
+    @Test
+    @DisplayName("Should resolve Groq API key when apiKey is configured")
+    void testGroqApiKeyResolution() throws Exception {
+        setField(client, "apiKey", "gsk_test_groq_api_key_12345");
+        setField(client, "groqApiKeyFallback", null);
+
+        Method getKeyMethod = DefaultAIProviderClient.class.getDeclaredMethod("getEffectiveApiKey");
+        getKeyMethod.setAccessible(true);
+        String resolvedKey = (String) getKeyMethod.invoke(client);
+
+        assertEquals("gsk_test_groq_api_key_12345", resolvedKey);
+    }
+
+    @Test
+    @DisplayName("Should resolve Groq API key fallback when apiKey is null")
+    void testGroqApiKeyFallbackResolution() throws Exception {
+        setField(client, "apiKey", null);
+        setField(client, "groqApiKeyFallback", "gsk_fallback_groq_api_key_67890");
+
+        Method getKeyMethod = DefaultAIProviderClient.class.getDeclaredMethod("getEffectiveApiKey");
+        getKeyMethod.setAccessible(true);
+        String resolvedKey = (String) getKeyMethod.invoke(client);
+
+        assertEquals("gsk_fallback_groq_api_key_67890", resolvedKey);
+    }
+
+    @Test
+    @DisplayName("Should strip think tags from Qwen reasoning model output")
+    void testStripThinkTags() throws Exception {
+        Method stripMethod = DefaultAIProviderClient.class.getDeclaredMethod("stripThinkTags", String.class);
+        stripMethod.setAccessible(true);
+        String input = "\n<think>\nInternal reasoning here...\n</think>\n\nFinal clean answer.";
+        String result = (String) stripMethod.invoke(client, input);
+
+        assertEquals("Final clean answer.", result);
     }
 
     private void setField(Object target, String fieldName, Object value) throws Exception {

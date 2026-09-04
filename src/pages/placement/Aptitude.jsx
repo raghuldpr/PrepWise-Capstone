@@ -529,7 +529,7 @@ export default function Aptitude() {
                     const isSelected = selectedOption === text;
 
                     // Styling for options during feedback
-                    let optionStyle = 'border-[rgba(0,0,0,0.12)] dark:border-[rgba(255,255,255,0.15)] bg-surface hover:border-[#C85232]';
+                    let optionStyle = 'border-[rgba(0,0,0,0.12)] dark:border-[rgba(255,255,255,0.15)] bg-surface hover:border-[#C85232] text-[#111111] dark:text-white';
                     if (isSelected) {
                       optionStyle = 'border-2 border-[#C85232] bg-[#C85232]/10 text-[#111111] dark:text-white font-semibold';
                     }
@@ -542,7 +542,7 @@ export default function Aptitude() {
                       } else if (isSelected && !attemptResult.isCorrect) {
                         optionStyle = 'border-2 border-rose-500 bg-rose-50 dark:bg-rose-950/40 text-rose-900 dark:text-rose-200 font-bold';
                       } else {
-                        optionStyle = 'opacity-50 border-[rgba(0,0,0,0.08)] dark:border-[rgba(255,255,255,0.08)]';
+                        optionStyle = 'opacity-50 border-[rgba(0,0,0,0.08)] dark:border-[rgba(255,255,255,0.08)] text-[#111111] dark:text-white';
                       }
                     }
 
@@ -561,7 +561,7 @@ export default function Aptitude() {
                         >
                           {optionLetter}
                         </div>
-                        <span className="text-sm md:text-base flex-1">{text}</span>
+                        <span className="text-sm md:text-base flex-1 text-inherit">{text}</span>
                         {attemptResult && text.trim().toLowerCase() === (attemptResult.correctAnswer || '').trim().toLowerCase() && (
                           <CheckCircle2 size={18} className="text-emerald-600 dark:text-emerald-400 shrink-0" />
                         )}

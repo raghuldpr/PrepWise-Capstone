@@ -882,7 +882,7 @@ export default function Profile() {
               </div>
 
               <button
-                onClick={() => setIsEditModalOpen(true)}
+                onClick={() => navigate('/onboarding/skills')}
                 className="btn-terracotta text-xs px-3 py-2 inline-flex items-center gap-1.5"
               >
                 <Edit3 size={14} /> Manage Skills
@@ -890,58 +890,64 @@ export default function Profile() {
             </div>
 
             {/* Categorized Skills */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="space-y-3">
-                <h4 className="text-xs font-bold uppercase tracking-wider text-[#5E5B56] dark:text-[#A0A0A0]">
-                  Programming & Problem Solving
-                </h4>
-                <div className="flex flex-wrap gap-2">
-                  {['Java (Advanced)', 'Python (Intermediate)', 'C++ (Intermediate)', 'JavaScript / TypeScript'].map((s, i) => (
-                    <span key={i} className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#EAE6DF] dark:bg-[#242424] text-[#111111] dark:text-white border border-[rgba(0,0,0,0.08)]">
-                      {s}
-                    </span>
-                  ))}
-                </div>
-              </div>
-
-              <div className="space-y-3">
-                <h4 className="text-xs font-bold uppercase tracking-wider text-[#5E5B56] dark:text-[#A0A0A0]">
-                  Core CS & System Design
-                </h4>
-                <div className="flex flex-wrap gap-2">
-                  {['Data Structures & Algorithms', 'Relational Databases & SQL', 'Operating Systems', 'System Design'].map((s, i) => (
-                    <span key={i} className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#EAE6DF] dark:bg-[#242424] text-[#111111] dark:text-white border border-[rgba(0,0,0,0.08)]">
-                      {s}
-                    </span>
-                  ))}
-                </div>
-              </div>
-
-              <div className="space-y-3">
-                <h4 className="text-xs font-bold uppercase tracking-wider text-[#5E5B56] dark:text-[#A0A0A0]">
-                  Frameworks & Tools
-                </h4>
-                <div className="flex flex-wrap gap-2">
-                  {['Spring Boot 3', 'React 19 & Vite', 'Docker & Compose', 'Git / GitHub', 'REST APIs', 'MySQL 8'].map((s, i) => (
-                    <span key={i} className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#EAE6DF] dark:bg-[#242424] text-[#111111] dark:text-white border border-[rgba(0,0,0,0.08)]">
-                      {s}
-                    </span>
-                  ))}
-                </div>
-              </div>
-
-              <div className="space-y-3">
-                <h4 className="text-xs font-bold uppercase tracking-wider text-[#5E5B56] dark:text-[#A0A0A0]">
-                  Verified Certifications
-                </h4>
-                <div className="space-y-2">
-                  {(p.certifications ? p.certifications.split(',') : ['AWS Certified Cloud Practitioner', 'Oracle Certified Professional: Java SE 17']).map((cert, i) => (
-                    <div key={i} className="flex items-center gap-2 text-xs font-semibold text-[#111111] dark:text-white">
-                      <Award size={14} className="text-[#C85232] shrink-0" />
-                      <span>{cert.trim()}</span>
+            {p.skills && p.skills.length > 0 ? (
+              <div className="space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {Object.entries(
+                    p.skills.reduce((acc, s) => {
+                      const cat = s.category || 'General Technical Skills';
+                      if (!acc[cat]) acc[cat] = [];
+                      acc[cat].push(s);
+                      return acc;
+                    }, {})
+                  ).map(([cat, catSkills]) => (
+                    <div key={cat} className="space-y-3">
+                      <h4 className="text-xs font-bold uppercase tracking-wider text-[#5E5B56] dark:text-[#A0A0A0]">
+                        {cat}
+                      </h4>
+                      <div className="flex flex-wrap gap-2">
+                        {catSkills.map((s) => (
+                          <span
+                            key={s.id}
+                            className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#EAE6DF] dark:bg-[#242424] text-[#111111] dark:text-white border border-[rgba(0,0,0,0.08)] flex items-center gap-1.5 shadow-xs"
+                          >
+                            <span>{s.name}</span>
+                            <span className="text-[10px] uppercase font-bold text-[#C85232]">
+                              • {s.proficiencyLevel ? s.proficiencyLevel.toLowerCase() : 'beginner'}
+                            </span>
+                          </span>
+                        ))}
+                      </div>
                     </div>
                   ))}
                 </div>
+              </div>
+            ) : (
+              <div className="text-center py-8 space-y-3 bg-surface-alt/50 rounded-xl border border-dashed border-[rgba(0,0,0,0.15)] dark:border-[rgba(255,255,255,0.15)] p-6">
+                <p className="text-sm text-[#5E5B56] dark:text-[#A0A0A0] max-w-md mx-auto">
+                  No technical skills configured yet. Add your core languages, frameworks, and subjects to personalize your AI practice sessions and skill gap analysis.
+                </p>
+                <button
+                  onClick={() => navigate('/onboarding/skills')}
+                  className="btn-terracotta text-xs px-4 py-2 inline-flex items-center gap-1.5"
+                >
+                  <Edit3 size={14} /> Select Your Skills Sheet
+                </button>
+              </div>
+            )}
+
+            {/* Verified Certifications */}
+            <div className="pt-6 border-t border-[rgba(0,0,0,0.08)] dark:border-[rgba(255,255,255,0.1)] space-y-3">
+              <h4 className="text-xs font-bold uppercase tracking-wider text-[#5E5B56] dark:text-[#A0A0A0]">
+                Verified Certifications
+              </h4>
+              <div className="space-y-2">
+                {(p.certifications ? p.certifications.split(',') : ['AWS Certified Cloud Practitioner', 'Oracle Certified Professional: Java SE 17']).map((cert, i) => (
+                  <div key={i} className="flex items-center gap-2 text-xs font-semibold text-[#111111] dark:text-white">
+                    <Award size={14} className="text-[#C85232] shrink-0" />
+                    <span>{cert.trim()}</span>
+                  </div>
+                ))}
               </div>
             </div>
           </Card>

@@ -103,19 +103,42 @@ public class OnboardingService {
 
     private List<Skill> seedDefaultSkills() {
         List<Skill> defaults = List.of(
-                Skill.builder().name("Java").category("Programming").description("Object-oriented programming language").build(),
-                Skill.builder().name("Python").category("Programming").description("High-level general-purpose programming language").build(),
-                Skill.builder().name("C++").category("Programming").description("Performance-focused system programming language").build(),
-                Skill.builder().name("Data Structures & Algorithms").category("Core CS").description("Arrays, Trees, Graphs, Sorting, Dynamic Programming").build(),
-                Skill.builder().name("System Design").category("Core CS").description("Scalable architectures, load balancing, caching, databases").build(),
-                Skill.builder().name("Database Management & SQL").category("Core CS").description("Relational databases, indexing, normalization, queries").build(),
-                Skill.builder().name("Operating Systems").category("Core CS").description("Processes, threads, memory management, file systems").build(),
-                Skill.builder().name("Computer Networks").category("Core CS").description("TCP/IP, HTTP/S, DNS, routing, OSI model").build(),
-                Skill.builder().name("React.js").category("Web Development").description("Frontend UI library for modern web applications").build(),
-                Skill.builder().name("Spring Boot").category("Web Development").description("Java-based enterprise framework for REST APIs").build(),
-                Skill.builder().name("Quantitative Aptitude").category("Aptitude").description("Numerical ability, ratios, probability, logic").build(),
-                Skill.builder().name("Logical Reasoning").category("Aptitude").description("Analytical puzzles, series, deductions").build(),
-                Skill.builder().name("Verbal & Communication").category("Soft Skills").description("Grammar, comprehension, articulate expression").build()
+                // Programming Languages
+                Skill.builder().name("Java").category("Programming Languages").description("Core Java, OOPs concepts, Collections Framework, Multithreading, Streams, and JVM internals.").build(),
+                Skill.builder().name("Python").category("Programming Languages").description("Python 3, scripting, data analysis, algorithms, and backend development with FastAPI/Django.").build(),
+                Skill.builder().name("C++").category("Programming Languages").description("Modern C++, STL algorithms & containers, memory management, pointers, and competitive programming.").build(),
+                Skill.builder().name("C").category("Programming Languages").description("Pointers, dynamic memory allocation (malloc/free), low-level system programming, and data structures.").build(),
+                Skill.builder().name("JavaScript").category("Programming Languages").description("ES6+, asynchronous programming, closures, event loop, Promises, and DOM manipulation.").build(),
+                Skill.builder().name("TypeScript").category("Programming Languages").description("Static typing, interfaces, generics, type guards, and enterprise application development.").build(),
+                Skill.builder().name("SQL").category("Programming Languages").description("Complex queries, aggregations, subqueries, indexing, window functions, and schema design.").build(),
+
+                // Core Computer Science
+                Skill.builder().name("Data Structures & Algorithms").category("Core Computer Science").description("Arrays, linked lists, stacks, queues, trees, graphs, heaps, dynamic programming, and complexity analysis.").build(),
+                Skill.builder().name("Operating Systems").category("Core Computer Science").description("Processes, threads, CPU scheduling, memory management, virtual memory, paging, deadlocks, and IPC.").build(),
+                Skill.builder().name("Database Management Systems").category("Core Computer Science").description("Relational database design, ACID properties, normalization (1NF-BCNF), indexing, and concurrency control.").build(),
+                Skill.builder().name("Computer Networks").category("Core Computer Science").description("OSI model, TCP/IP stack, routing protocols, flow control, DNS, HTTP/HTTPS, and network security.").build(),
+                Skill.builder().name("System Design & Architecture").category("Core Computer Science").description("Scalable architecture, microservices, load balancing, caching (Redis), message queues, and DB partitioning.").build(),
+                Skill.builder().name("Object-Oriented Programming (OOP)").category("Core Computer Science").description("Encapsulation, inheritance, polymorphism, abstraction, design patterns, and SOLID design principles.").build(),
+
+                // Backend & Cloud Technologies
+                Skill.builder().name("Spring Boot").category("Backend & Cloud").description("Enterprise REST API development, Dependency Injection, Spring Security, Spring Data JPA, and Microservices.").build(),
+                Skill.builder().name("Node.js & Express").category("Backend & Cloud").description("Asynchronous event-driven backend services, RESTful APIs, middleware architecture, and JWT authentication.").build(),
+                Skill.builder().name("PostgreSQL").category("Backend & Cloud").description("Advanced relational database design, indexing, transactions, JSONB querying, and SQL optimization.").build(),
+                Skill.builder().name("MySQL").category("Backend & Cloud").description("Relational schema design, normalization, indexing, complex JOIN queries, and query tuning.").build(),
+                Skill.builder().name("RESTful APIs").category("Backend & Cloud").description("HTTP methods, REST architectural constraints, JSON formatting, status codes, and API security.").build(),
+                Skill.builder().name("Docker & Containers").category("Backend & Cloud").description("Containerization, Dockerfiles, multi-stage builds, docker-compose orchestration, and deployment.").build(),
+                Skill.builder().name("Git & GitHub").category("Backend & Cloud").description("Version control workflows, branching models, pull requests, rebase/merge, and collaborative development.").build(),
+                Skill.builder().name("AWS & Cloud Fundamentals").category("Backend & Cloud").description("Cloud hosting concepts, EC2, S3, RDS, Serverless compute, and basic cloud security.").build(),
+
+                // Frontend Development
+                Skill.builder().name("React.js").category("Frontend Development").description("Modern UI development, React hooks (useState, useEffect, useMemo), component lifecycle, and state management.").build(),
+                Skill.builder().name("HTML5 & CSS3").category("Frontend Development").description("Semantic markup, responsive layouts, Flexbox, CSS Grid, animations, and cross-browser styling.").build(),
+                Skill.builder().name("Tailwind CSS").category("Frontend Development").description("Utility-first styling, responsive UI design systems, dark mode theming, and layout utilities.").build(),
+
+                // Aptitude & Reasoning
+                Skill.builder().name("Quantitative Aptitude").category("Aptitude & Reasoning").description("Time & work, speed & distance, percentages, ratio & proportion, interest, and probability for placement exams.").build(),
+                Skill.builder().name("Logical Reasoning").category("Aptitude & Reasoning").description("Syllogisms, blood relations, series completion, analytical reasoning, and coding-decoding puzzles.").build(),
+                Skill.builder().name("Verbal Ability & Communication").category("Aptitude & Reasoning").description("Reading comprehension, sentence correction, technical articulation, and interview communication.").build()
         );
         return skillRepository.saveAll(defaults);
     }

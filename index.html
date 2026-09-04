@@ -3,12 +3,39 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="PrepWise - AI Interview & Technical Placement Preparation Platform" />
+    <meta property="og:title" content="PrepWise" />
+    <meta property="og:description" content="AI Interview & Technical Placement Preparation Platform" />
+    <meta property="og:type" content="website" />
+    <meta name="theme-color" content="#C85232" />
     <title>PrepWise - Technical Placement & Career AI Engine</title>
-    <link rel="icon" type="image/x-icon" href="/favicon.ico">
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-    <link rel="manifest" href="/site.webmanifest">
+    <!-- PrepWise Favicon Configuration (Inline Data URI for 0-latency & zero cache issues, plus standard links) -->
+    <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAETUlEQVR4AexVfUyUdRz/8Nw9J3ondiQc0EQ0hyPfQHzJyVpWEirJYkUGRTfhNLWXkZuajVIqE9iQdJVDTSxTRyMHtTktaa4zIO8E0+MgcQiyyZAU7RjeHSd9n4fbuee5l+cR3PjH2+/7+z3fz/ft83s9pq+vb9ButwcUhz2wXRzvsMvzt9lsg4xSqQTLsgFFKWEXx8v152ozGMSo/phRrU7FGQRRP0otiGozUrU/KihHVm4hsnJIuDG3SKC/YeDwIqxeX4KdJRWwNLdLpfTYB2n7Ga7zID4+jLWX8GuNGeYLl2FubCWhsaEV5y+QcDp9mxv/we9/NKKwtAJJyRtheLcUt+/0+cjmDTG0Ct6oCJk3NxbNpv0k+4bEvA9W033hbG1/f4cG41cwvJWCymojVrySL4sEI30GOIqciFiJVXKJidah6NNc7N+TB2vLNXywtUzs5aVLbgH4e0qb5RXqH0hfuRi5+hT8VH0WFy1t/h3JwpBIN4n6LjpIvc67gjx569PB0AYfqzwjwMUKw10FMShHN/Z24IW/DiL2zC5oTm1HVE2hICxCp0X8rCdRZ2oW4GJFxgrQ5lITB6oZFrPH66AMUsA+4MKAy0WbJVyqmOhwXO+6KQ4V6DIIkL8wLwFAQkgkZmjC0WLrwewJEfC1lHbHAFilgvf318kgwFX3XoLjXRa8fbEK66LnY9PUJCj4vRT6XWq6imlTo/zV5nEZBMgviCNBo7ud7rmCzIYKZEbNwe4ZqVgWFoujCa8JbvSf9U1ov9aN5OcS3VG+BxkEuFlxMpTgXG8n0k0/YHn4dByYQyedZq5lx2KlLm7Igfr+fjs2f/wtQrUavP7qs4T4bzIIAOpxwXyGZtsNrKg/hEXaSTiSkEEH0Du85987WLV6JyzWqyj5fC1Cxo/jY/113hlEnlNiIvBl0Tp03r2NlPqDmK4JQ+W8LIxhlHC57sHUcBmnas7j5xP12PbFYSxY8h7O1llQ/JkBaamLRNm8VUkCX5e8gzGhwUipK8dEVo1fFmRDrVDRU9uBhc/nYWnah8jQ70D22mLs3luFmU/F4OTxHcjJftG7mg9EksA9VRBSTd+Du+UnntZjAhvMz/zNNcXovnELhQU5+PHQVlQd/QTWc2WoPrYNifHTfJTyDUkSeH/TN+gqt+LkQj3CVGo+i8Xajitt17ElLwNr9MuwdMlcPLN4FnThWt7+IB39GQmvmDi4takTcTc1iB77mMf0n60f9Pxj0hNhHmy4H/SA3b9iPpPwZr7zmG1EAPQ2qFiFBxvuh+QW8FPlpuuuwN3xPWVVCFaxSEyIdaPDH6QJUO6mlg68nFmAtFXbEZ+0AcZaC/I3Z2Hi4yFkHVmTJDBlciQidaHo6r6F7p5ezIybjCMHtmCD4aWRVXZHSxIo37sRtadLUfvbLl4qD+djefJ8d/jIB0kCIy8ROMMjAozT4YTD4XgI4jtPoNxO5wD+BwAA//+QTFAJAAAABklEQVQDAB3sKSW7q4ZEAAAAAElFTkSuQmCC">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=4">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v=4">
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=4">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=4">
+    <link rel="manifest" href="/site.webmanifest?v=4">
+    <script>
+      (function() {
+        try {
+          var saved = localStorage.getItem('prepwise-theme');
+          var isDark = saved ? saved === 'dark' : (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
+          if (isDark) {
+            document.documentElement.classList.add('dark');
+          } else {
+            document.documentElement.classList.remove('dark');
+          }
+
+          // Force browser tab to immediately recognize and paint PrepWise favicon
+          var fav = document.createElement('link');
+          fav.rel = 'icon';
+          fav.type = 'image/png';
+          fav.href = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAETUlEQVR4AexVfUyUdRz/8Nw9J3ondiQc0EQ0hyPfQHzJyVpWEirJYkUGRTfhNLWXkZuajVIqE9iQdJVDTSxTRyMHtTktaa4zIO8E0+MgcQiyyZAU7RjeHSd9n4fbuee5l+cR3PjH2+/7+z3fz/ft83s9pq+vb9ButwcUhz2wXRzvsMvzt9lsg4xSqQTLsgFFKWEXx8v152ozGMSo/phRrU7FGQRRP0otiGozUrU/KihHVm4hsnJIuDG3SKC/YeDwIqxeX4KdJRWwNLdLpfTYB2n7Ga7zID4+jLWX8GuNGeYLl2FubCWhsaEV5y+QcDp9mxv/we9/NKKwtAJJyRtheLcUt+/0+cjmDTG0Ct6oCJk3NxbNpv0k+4bEvA9W033hbG1/f4cG41cwvJWCymojVrySL4sEI30GOIqciFiJVXKJidah6NNc7N+TB2vLNXywtUzs5aVLbgH4e0qb5RXqH0hfuRi5+hT8VH0WFy1t/h3JwpBIN4n6LjpIvc67gjx569PB0AYfqzwjwMUKw10FMShHN/Z24IW/DiL2zC5oTm1HVE2hICxCp0X8rCdRZ2oW4GJFxgrQ5lITB6oZFrPH66AMUsA+4MKAy0WbJVyqmOhwXO+6KQ4V6DIIkL8wLwFAQkgkZmjC0WLrwewJEfC1lHbHAFilgvf318kgwFX3XoLjXRa8fbEK66LnY9PUJCj4vRT6XWq6imlTo/zV5nEZBMgviCNBo7ud7rmCzIYKZEbNwe4ZqVgWFoujCa8JbvSf9U1ov9aN5OcS3VG+BxkEuFlxMpTgXG8n0k0/YHn4dByYQyedZq5lx2KlLm7Igfr+fjs2f/wtQrUavP7qs4T4bzIIAOpxwXyGZtsNrKg/hEXaSTiSkEEH0Du85987WLV6JyzWqyj5fC1Cxo/jY/113hlEnlNiIvBl0Tp03r2NlPqDmK4JQ+W8LIxhlHC57sHUcBmnas7j5xP12PbFYSxY8h7O1llQ/JkBaamLRNm8VUkCX5e8gzGhwUipK8dEVo1fFmRDrVDRU9uBhc/nYWnah8jQ70D22mLs3luFmU/F4OTxHcjJftG7mg9EksA9VRBSTd+Du+UnntZjAhvMz/zNNcXovnELhQU5+PHQVlQd/QTWc2WoPrYNifHTfJTyDUkSeH/TN+gqt+LkQj3CVGo+i8Xajitt17ElLwNr9MuwdMlcPLN4FnThWt7+IB39GQmvmDi4takTcTc1iB77mMf0n60f9Pxj0hNhHmy4H/SA3b9iPpPwZr7zmG1EAPQ2qFiFBxvuh+QW8FPlpuuuwN3xPWVVCFaxSEyIdaPDH6QJUO6mlg68nFmAtFXbEZ+0AcZaC/I3Z2Hi4yFkHVmTJDBlciQidaHo6r6F7p5ezIybjCMHtmCD4aWRVXZHSxIo37sRtadLUfvbLl4qD+djefJ8d/jIB0kCIy8ROMMjAozT4YTD4XgI4jtPoNxO5wD+BwAA//+QTFAJAAAABklEQVQDAB3sKSW7q4ZEAAAAAElFTkSuQmCC';
+          document.head.appendChild(fav);
+        } catch (e) {}
+      })();
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Instrument+Sans:ital,wght@0,600;0,700;1,600;1,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@500;600;700&display=swap" rel="stylesheet">

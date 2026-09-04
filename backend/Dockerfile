@@ -3,13 +3,13 @@ FROM maven:3.9-eclipse-temurin-17 AS build
 
 WORKDIR /app
 
-# Copy backend pom.xml and source code
-# Manual Render services use repo root as Docker context
+# Copy POM first to leverage Docker layer caching for Maven dependencies
 COPY backend/pom.xml ./pom.xml
-COPY backend/src ./src
+RUN mvn dependency:go-offline -B -DskipTests -Dmaven.wagon.http.retryHandler.count=5 -Dmaven.wagon.http.pool=false || true
 
-# Build the application
-RUN mvn clean package -DskipTests -B -e
+# Copy source code and build package
+COPY backend/src ./src
+RUN mvn clean package -DskipTests -B -e -Dmaven.wagon.http.retryHandler.count=5 -Dmaven.wagon.http.pool=false
 
 # Verify the JAR contains the main class (fail-fast)
 RUN jar tf target/app.jar | grep "PrepWiseApplication" && echo "JAR verification PASSED"

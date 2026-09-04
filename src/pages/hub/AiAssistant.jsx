@@ -198,27 +198,27 @@ export default function AiAssistant() {
     <div className="space-y-6 font-body pb-12">
       <CareerHubHeader />
 
-      <div className="min-h-[calc(100vh-9rem)] flex flex-col md:flex-row bg-[#121212] text-white rounded-2xl overflow-hidden border border-[#2A2A2A] shadow-2xl font-body">
+      <div className="min-h-[calc(100vh-9rem)] flex flex-col md:flex-row bg-[#EFECE6] dark:bg-[#121212] text-[#111111] dark:text-white rounded-2xl overflow-hidden border border-[rgba(0,0,0,0.08)] dark:border-[#2A2A2A] shadow-2xl font-body">
       {/* Sidebar - Past Conversations */}
       <div
         className={`${
           sidebarOpen ? 'w-full md:w-80 flex' : 'hidden md:hidden'
-        } flex-col bg-[#181818] border-r border-[#2A2A2A] transition-all duration-200 z-10`}
+        } flex-col bg-[#EAE6DF] dark:bg-[#181818] border-r border-[rgba(0,0,0,0.08)] dark:border-[#2A2A2A] transition-all duration-200 z-10`}
       >
         {/* Sidebar Top Header */}
-        <div className="p-4 border-b border-[#2A2A2A] flex items-center justify-between">
+        <div className="p-4 border-b border-[rgba(0,0,0,0.08)] dark:border-[#2A2A2A] flex items-center justify-between">
           <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-lg bg-[#C85232] flex items-center justify-center text-white font-bold">
               <Sparkles size={18} />
             </div>
             <div>
-              <h2 className="font-bold text-sm font-heading tracking-tight text-white">AI Placement Assistant</h2>
-              <span className="text-[10px] text-amber-500 font-semibold uppercase tracking-wider">24/7 AI Tutor</span>
+              <h2 className="font-bold text-sm font-heading tracking-tight text-[#111111] dark:text-white">AI Placement Assistant</h2>
+              <span className="text-[10px] text-[#C85232] dark:text-amber-500 font-semibold uppercase tracking-wider">24/7 AI Tutor</span>
             </div>
           </div>
           <button
             onClick={() => setSidebarOpen(false)}
-            className="md:hidden p-1.5 rounded-lg text-neutral-400 hover:text-white hover:bg-[#2A2A2A]"
+            className="md:hidden p-1.5 rounded-lg text-[#5E5B56] dark:text-neutral-400 hover:text-[#111111] dark:hover:text-white hover:bg-[#DFD9CE] dark:hover:bg-[#2A2A2A]"
           >
             <PanelLeftClose size={18} />
           </button>
@@ -237,20 +237,20 @@ export default function AiAssistant() {
 
         {/* Conversations List */}
         <div className="flex-1 overflow-y-auto px-3 py-2 space-y-1">
-          <div className="px-2 py-1.5 text-[11px] font-bold uppercase tracking-wider text-neutral-500">
+          <div className="px-2 py-1.5 text-[11px] font-bold uppercase tracking-wider text-[#5E5B56] dark:text-neutral-500">
             Past Discussions
           </div>
 
           {fetchingConversations ? (
-            <div className="p-4 text-center text-xs text-neutral-500 space-y-2">
-              <div className="w-4 h-4 border-2 border-amber-600 border-t-transparent rounded-full animate-spin mx-auto"></div>
+            <div className="p-4 text-center text-xs text-[#5E5B56] dark:text-neutral-500 space-y-2">
+              <div className="w-4 h-4 border-2 border-[#C85232] border-t-transparent rounded-full animate-spin mx-auto"></div>
               <p>Loading history...</p>
             </div>
           ) : conversations.length === 0 ? (
-            <div className="p-6 text-center text-xs text-neutral-500">
+            <div className="p-6 text-center text-xs text-[#5E5B56] dark:text-neutral-500">
               <MessageSquare size={24} className="mx-auto mb-2 opacity-40" />
               <p>No chat history yet.</p>
-              <p className="text-[11px] mt-1 text-neutral-600">Start a new conversation to ask questions!</p>
+              <p className="text-[11px] mt-1 text-[#5E5B56]/80 dark:text-neutral-600">Start a new conversation to ask questions!</p>
             </div>
           ) : (
             conversations.map((conv) => {
@@ -261,17 +261,17 @@ export default function AiAssistant() {
                   onClick={() => handleSelectConversation(conv.id)}
                   className={`group flex items-center justify-between p-3 rounded-xl cursor-pointer text-xs transition-all ${
                     isSelected
-                      ? 'bg-[#2A2A2A] text-white font-medium border border-neutral-700'
-                      : 'text-neutral-400 hover:bg-[#222222] hover:text-neutral-200'
+                      ? 'bg-[#EFECE6] dark:bg-[#2A2A2A] text-[#111111] dark:text-white font-semibold border border-[rgba(0,0,0,0.12)] dark:border-neutral-700 shadow-xs'
+                      : 'text-[#5E5B56] dark:text-neutral-400 hover:bg-[#E2DDD5] dark:hover:bg-[#222222] hover:text-[#111111] dark:hover:text-neutral-200'
                   }`}
                 >
                   <div className="flex items-center gap-2.5 truncate flex-1 min-w-0 pr-2">
-                    <MessageSquare size={15} className={isSelected ? 'text-[#C85232]' : 'text-neutral-500'} />
+                    <MessageSquare size={15} className={isSelected ? 'text-[#C85232]' : 'text-[#5E5B56] dark:text-neutral-500'} />
                     <span className="truncate">{conv.title || 'Placement Inquiry'}</span>
                   </div>
                   <button
                     onClick={(e) => handleDeleteConversation(e, conv.id)}
-                    className="opacity-0 group-hover:opacity-100 p-1 text-neutral-500 hover:text-rose-400 transition-opacity"
+                    className="opacity-0 group-hover:opacity-100 p-1 text-[#5E5B56] dark:text-neutral-500 hover:text-rose-500 dark:hover:text-rose-400 transition-opacity"
                     title="Delete Chat"
                   >
                     <Trash2 size={14} />
@@ -284,14 +284,14 @@ export default function AiAssistant() {
       </div>
 
       {/* Main Workspace */}
-      <div className="flex-1 flex flex-col bg-[#121212] relative overflow-hidden">
+      <div className="flex-1 flex flex-col bg-[#F7F5F0] dark:bg-[#121212] relative overflow-hidden">
         {/* Workspace Top Bar */}
-        <div className="p-4 bg-[#181818] border-b border-[#2A2A2A] flex items-center justify-between z-10">
+        <div className="p-4 bg-[#EFECE6] dark:bg-[#181818] border-b border-[rgba(0,0,0,0.08)] dark:border-[#2A2A2A] flex items-center justify-between z-10">
           <div className="flex items-center gap-3">
             {!sidebarOpen && (
               <button
                 onClick={() => setSidebarOpen(true)}
-                className="p-1.5 rounded-lg text-neutral-400 hover:text-white hover:bg-[#2A2A2A] transition-colors"
+                className="p-1.5 rounded-lg text-[#5E5B56] dark:text-neutral-400 hover:text-[#111111] dark:hover:text-white hover:bg-[#EAE6DF] dark:hover:bg-[#2A2A2A] transition-colors"
                 title="Open Sidebar"
               >
                 <PanelLeftOpen size={20} />
@@ -301,8 +301,8 @@ export default function AiAssistant() {
               <Bot size={18} />
             </div>
             <div>
-              <h1 className="font-bold text-sm font-heading text-white">Placement Assistant AI</h1>
-              <p className="text-[11px] text-neutral-400 flex items-center gap-1.5">
+              <h1 className="font-bold text-sm font-heading text-[#111111] dark:text-white">Placement Assistant AI</h1>
+              <p className="text-[11px] text-[#5E5B56] dark:text-neutral-400 flex items-center gap-1.5">
                 <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
                 Ready to help with DSA, System Design, HR & Resume
               </p>
@@ -311,7 +311,7 @@ export default function AiAssistant() {
 
           <button
             onClick={handleNewChat}
-            className="text-xs bg-[#222222] hover:bg-[#2A2A2A] border border-[#333333] text-neutral-300 hover:text-white px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-colors"
+            className="text-xs bg-[#EAE6DF] hover:bg-[#E2DDD5] dark:bg-[#222222] dark:hover:bg-[#2A2A2A] border border-[rgba(0,0,0,0.12)] dark:border-[#333333] text-[#111111] dark:text-neutral-300 hover:text-[#111111] dark:hover:text-white px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-colors font-medium"
           >
             <Plus size={14} />
             <span className="hidden sm:inline">New Session</span>
@@ -322,11 +322,11 @@ export default function AiAssistant() {
         <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-6">
           {messages.length === 0 ? (
             <div className="h-full flex flex-col items-center justify-center text-center max-w-xl mx-auto py-8">
-              <div className="w-16 h-16 rounded-2xl bg-[#1E1E1E] border border-[#2E2E2E] flex items-center justify-center text-[#C85232] mb-4 shadow-lg">
+              <div className="w-16 h-16 rounded-2xl bg-[#EAE6DF] dark:bg-[#1E1E1E] border border-[rgba(0,0,0,0.08)] dark:border-[#2E2E2E] flex items-center justify-center text-[#C85232] mb-4 shadow-sm">
                 <Sparkles size={32} />
               </div>
-              <h2 className="text-2xl font-bold font-heading mb-2 text-white">How can I assist your placement prep today?</h2>
-              <p className="text-xs text-neutral-400 mb-8 leading-relaxed">
+              <h2 className="text-2xl font-bold font-heading mb-2 text-[#111111] dark:text-white">How can I assist your placement prep today?</h2>
+              <p className="text-xs text-[#5E5B56] dark:text-neutral-400 mb-8 leading-relaxed">
                 Ask anything about technical interviews, DSA logic, core CS concepts, resume bullet points, or company-specific hiring rounds.
               </p>
 
@@ -336,13 +336,13 @@ export default function AiAssistant() {
                   <button
                     key={idx}
                     onClick={() => handleSendMessage(item.prompt)}
-                    className="p-3.5 rounded-xl bg-[#1E1E1E] hover:bg-[#282828] border border-[#2E2E2E] hover:border-[#3E3E3E] transition-all text-left group"
+                    className="p-3.5 rounded-xl bg-[#EFECE6] hover:bg-[#EAE6DF] dark:bg-[#1E1E1E] dark:hover:bg-[#282828] border border-[rgba(0,0,0,0.08)] dark:border-[#2E2E2E] hover:border-[#C85232]/40 transition-all text-left group shadow-xs"
                   >
-                    <p className="text-xs font-bold text-[#C85232] mb-1 group-hover:text-amber-400 flex items-center justify-between">
+                    <p className="text-xs font-bold text-[#C85232] mb-1 group-hover:text-[#A43A1E] dark:group-hover:text-amber-400 flex items-center justify-between">
                       <span>{item.title}</span>
                       <ArrowRight size={12} className="opacity-0 group-hover:opacity-100 transition-opacity" />
                     </p>
-                    <p className="text-[11px] text-neutral-400 line-clamp-2">{item.prompt}</p>
+                    <p className="text-[11px] text-[#5E5B56] dark:text-neutral-400 line-clamp-2">{item.prompt}</p>
                   </button>
                 ))}
               </div>
@@ -371,7 +371,7 @@ export default function AiAssistant() {
                     className={`relative group rounded-2xl p-4 text-xs sm:text-sm leading-relaxed shadow-sm ${
                       isUser
                         ? 'bg-[#C85232] text-white rounded-tr-none'
-                        : 'bg-[#1E1E1E] text-neutral-200 border border-[#2A2A2A] rounded-tl-none'
+                        : 'bg-[#EFECE6] dark:bg-[#1E1E1E] text-[#111111] dark:text-neutral-200 border border-[rgba(0,0,0,0.08)] dark:border-[#2A2A2A] rounded-tl-none'
                     }`}
                   >
                     {isUser ? (
@@ -383,17 +383,17 @@ export default function AiAssistant() {
                     )}
 
                     {!isUser && (
-                      <div className="mt-2 pt-2 border-t border-[#2A2A2A] flex items-center justify-between text-[10px] text-neutral-500">
+                      <div className="mt-2 pt-2 border-t border-[rgba(0,0,0,0.08)] dark:border-[#2A2A2A] flex items-center justify-between text-[10px] text-[#5E5B56] dark:text-neutral-500">
                         <span>AI Assistant</span>
                         <button
                           onClick={() => copyToClipboard(msg.messageText, index)}
-                          className="flex items-center gap-1 text-neutral-400 hover:text-white transition-colors"
+                          className="flex items-center gap-1 text-[#5E5B56] dark:text-neutral-400 hover:text-[#111111] dark:hover:text-white transition-colors"
                           title="Copy message"
                         >
                           {copiedIndex === index ? (
                             <>
-                              <Check size={12} className="text-emerald-400" />
-                              <span className="text-emerald-400">Copied</span>
+                              <Check size={12} className="text-emerald-500 dark:text-emerald-400" />
+                              <span className="text-emerald-500 dark:text-emerald-400 font-semibold">Copied</span>
                             </>
                           ) : (
                             <>
@@ -416,25 +416,25 @@ export default function AiAssistant() {
               <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-[#C85232] to-amber-600 flex items-center justify-center text-white shrink-0">
                 <Bot size={16} />
               </div>
-              <div className="bg-[#1E1E1E] border border-[#2A2A2A] rounded-2xl rounded-tl-none p-4 text-xs text-neutral-400 flex items-center gap-2">
+              <div className="bg-[#EFECE6] dark:bg-[#1E1E1E] border border-[rgba(0,0,0,0.08)] dark:border-[#2A2A2A] rounded-2xl rounded-tl-none p-4 text-xs text-[#5E5B56] dark:text-neutral-400 flex items-center gap-2 shadow-xs">
                 <span className="w-2 h-2 rounded-full bg-[#C85232] animate-bounce"></span>
                 <span className="w-2 h-2 rounded-full bg-amber-500 animate-bounce [animation-delay:0.2s]"></span>
                 <span className="w-2 h-2 rounded-full bg-amber-300 animate-bounce [animation-delay:0.4s]"></span>
-                <span className="text-[11px] ml-2 text-neutral-500">AI is thinking...</span>
+                <span className="text-[11px] ml-2 text-[#5E5B56] dark:text-neutral-500">AI is thinking...</span>
               </div>
             </div>
           )}
 
           {/* Error Banner */}
           {error && (
-            <div className="p-4 bg-rose-950/40 border border-rose-800/50 rounded-xl text-rose-300 text-xs flex items-center justify-between gap-3">
+            <div className="p-4 bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800/50 rounded-xl text-rose-700 dark:text-rose-300 text-xs flex items-center justify-between gap-3">
               <div className="flex items-center gap-2">
-                <AlertTriangle size={18} className="text-rose-400 shrink-0" />
+                <AlertTriangle size={18} className="text-rose-600 dark:text-rose-400 shrink-0" />
                 <span>{error}</span>
               </div>
               <button
                 onClick={() => handleSendMessage()}
-                className="px-3 py-1 bg-rose-800 hover:bg-rose-700 text-white font-semibold rounded-lg text-[11px] flex items-center gap-1 transition-colors shrink-0"
+                className="px-3 py-1 bg-rose-600 hover:bg-rose-700 text-white font-semibold rounded-lg text-[11px] flex items-center gap-1 transition-colors shrink-0"
               >
                 <RefreshCw size={12} /> Retry
               </button>
@@ -445,13 +445,13 @@ export default function AiAssistant() {
         </div>
 
         {/* Input Bar Pinned at Bottom */}
-        <div className="p-3 sm:p-4 bg-[#181818] border-t border-[#2A2A2A]">
+        <div className="p-3 sm:p-4 bg-[#EFECE6] dark:bg-[#181818] border-t border-[rgba(0,0,0,0.08)] dark:border-[#2A2A2A]">
           <form
             onSubmit={(e) => {
               e.preventDefault();
               handleSendMessage();
             }}
-            className="flex items-center gap-2 bg-[#121212] border border-[#2A2A2A] focus-within:border-[#C85232] rounded-xl p-2 transition-colors"
+            className="flex items-center gap-2 bg-[#EAE6DF] dark:bg-[#121212] border border-[rgba(0,0,0,0.12)] dark:border-[#2A2A2A] focus-within:border-[#C85232] rounded-xl p-2 transition-colors"
           >
             <textarea
               ref={inputRef}
@@ -461,21 +461,21 @@ export default function AiAssistant() {
               placeholder="Ask a placement question (e.g., 'Explain binary search space reduction' or 'Resume review tips')..."
               rows={1}
               disabled={loading}
-              className="flex-1 bg-transparent text-white text-xs sm:text-sm placeholder-neutral-500 focus:outline-none resize-none px-2 py-1 max-h-32 min-h-[38px]"
+              className="flex-1 bg-transparent text-[#111111] dark:text-white text-xs sm:text-sm placeholder-[#5E5B56]/70 dark:placeholder-neutral-500 focus:outline-none resize-none px-2 py-1 max-h-32 min-h-[38px]"
             />
 
             <button
               type="submit"
               disabled={loading || !inputQuestion.trim()}
-              className="w-10 h-10 rounded-lg bg-[#C85232] hover:bg-[#B34528] disabled:bg-neutral-800 disabled:text-neutral-600 text-white font-bold flex items-center justify-center transition-all shrink-0 shadow-md active:scale-95"
+              className="w-10 h-10 rounded-lg bg-[#C85232] hover:bg-[#A43A1E] disabled:bg-[#E2DDD5] dark:disabled:bg-neutral-800 disabled:text-[#5E5B56] dark:disabled:text-neutral-600 text-white font-bold flex items-center justify-center transition-all shrink-0 shadow-md active:scale-95 cursor-pointer"
               title="Send Question"
             >
               <Send size={18} />
             </button>
           </form>
-          <div className="flex items-center justify-between mt-2 px-1 text-[10px] text-neutral-500">
+          <div className="flex items-center justify-between mt-2 px-1 text-[10px] text-[#5E5B56] dark:text-neutral-500">
             <span>Press Enter to send, Shift + Enter for new line</span>
-            <span className="hidden sm:inline">Powered by AI Service</span>
+            <span className="hidden sm:inline">Powered by Groq Cloud AI</span>
           </div>
         </div>
       </div>

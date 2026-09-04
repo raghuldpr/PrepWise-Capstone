@@ -147,7 +147,7 @@ export default function ProjectDetail() {
       )}
 
       {/* Hero Banner Card */}
-      <div className="bg-[#1E1E1E] border border-[#2E2E2E] rounded-2xl p-6 sm:p-8 text-white relative overflow-hidden shadow-xl">
+      <div className="bg-surface border border-[rgba(0,0,0,0.08)] dark:border-[#2E2E2E] rounded-2xl p-6 sm:p-8 relative overflow-hidden shadow-sm">
         <div className="absolute -right-12 -bottom-12 w-48 h-48 bg-[#C85232]/10 rounded-full blur-3xl pointer-events-none"></div>
 
         <div className="flex flex-col md:flex-row items-start justify-between gap-6 relative z-10">
@@ -155,21 +155,21 @@ export default function ProjectDetail() {
             <div className="flex items-center gap-2">
               <span className={`px-3 py-1 rounded-full text-xs font-extrabold uppercase tracking-wider ${
                 project.difficulty === 'EASY'
-                  ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
+                  ? 'bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30'
                   : project.difficulty === 'HARD'
-                  ? 'bg-rose-500/20 text-rose-400 border border-rose-500/30'
-                  : 'bg-amber-500/20 text-amber-400 border border-amber-500/30'
+                  ? 'bg-rose-500/20 text-rose-600 dark:text-rose-400 border border-rose-500/30'
+                  : 'bg-amber-500/20 text-amber-600 dark:text-amber-400 border border-amber-500/30'
               }`}>
                 {project.difficulty || 'MEDIUM'} DIFFICULTY
               </span>
-              <span className="text-xs text-neutral-400">• Portfolio Ready</span>
+              <span className="text-xs text-[#5E5B56] dark:text-neutral-400">• Portfolio Ready</span>
             </div>
 
-            <h1 className="text-2xl sm:text-3xl font-bold font-heading text-white">
+            <h1 className="text-2xl sm:text-3xl font-bold font-heading text-[#111111] dark:text-white">
               {project.title}
             </h1>
 
-            <p className="text-xs sm:text-sm text-neutral-300 leading-relaxed max-w-3xl">
+            <p className="text-xs sm:text-sm text-[#5E5B56] dark:text-neutral-300 leading-relaxed max-w-3xl">
               {project.problemStatement || project.description}
             </p>
           </div>

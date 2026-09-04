@@ -55,9 +55,14 @@ export const AppLayout = () => {
       {/* Mobile Top Header (<768px) */}
       <header className="md:hidden sticky top-0 z-40 bg-[#EFECE6] dark:bg-[#1E1E1E] border-b border-[rgba(0,0,0,0.08)] dark:border-[rgba(255,255,255,0.12)] px-4 py-3 flex items-center justify-between">
         <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-lg bg-[#C85232] flex items-center justify-center text-white font-bold text-lg">
-            P
-          </div>
+          <img
+            src="/apple-touch-icon.png"
+            alt="PrepWise"
+            className="w-8 h-8 rounded-lg object-contain shadow-xs shrink-0"
+            onError={(e) => {
+              e.currentTarget.src = '/favicon-32x32.png';
+            }}
+          />
           <span className="font-bold text-xl font-heading text-[#111111] dark:text-white">
             PrepWise
           </span>
@@ -143,9 +148,14 @@ export const AppLayout = () => {
         <div>
           {/* App Logo */}
           <div className="flex items-center gap-3 px-2 mb-8">
-            <div className="w-10 h-10 rounded-xl bg-[#C85232] flex items-center justify-center text-white font-bold text-xl shadow-xs">
-              P
-            </div>
+            <img
+              src="/apple-touch-icon.png"
+              alt="PrepWise"
+              className="w-10 h-10 rounded-xl object-contain shadow-xs shrink-0"
+              onError={(e) => {
+                e.currentTarget.src = '/favicon-32x32.png';
+              }}
+            />
             <div>
               <span className="font-extrabold text-2xl font-heading text-[#111111] dark:text-white tracking-tight">
                 PrepWise

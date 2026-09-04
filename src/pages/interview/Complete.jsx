@@ -41,8 +41,8 @@ export default function Complete() {
   }, [id]);
 
   return (
-    <div className="min-h-screen bg-[#0E0E10] text-[#E4E4E7] flex flex-col items-center justify-center p-4 sm:p-6 font-body selection:bg-[#C85232]/30 selection:text-white">
-      <div className="max-w-md w-full bg-[#161619] border border-neutral-800 rounded-2xl p-6 sm:p-8 text-center space-y-6 shadow-2xl relative overflow-hidden">
+    <div className="min-h-screen bg-canvas text-[#111111] dark:text-[#E4E4E7] flex flex-col items-center justify-center p-4 sm:p-6 font-body selection:bg-[#C85232]/30 selection:text-white">
+      <div className="max-w-md w-full bg-surface border border-[rgba(0,0,0,0.08)] dark:border-neutral-800 rounded-2xl p-6 sm:p-8 text-center space-y-6 shadow-xl relative overflow-hidden">
         {/* Top Terracotta Accent */}
         <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[#C85232] to-transparent" />
 
@@ -51,40 +51,40 @@ export default function Complete() {
           <div className="w-20 h-20 rounded-2xl bg-[#C85232]/15 border-2 border-[#C85232]/40 flex items-center justify-center text-[#C85232] mx-auto animate-bounce">
             <CheckCircle2 size={40} />
           </div>
-          <span className="absolute -top-1 -right-1 w-6 h-6 rounded-full bg-emerald-500 flex items-center justify-center text-black font-bold text-xs ring-4 ring-[#161619]">
+          <span className="absolute -top-1 -right-1 w-6 h-6 rounded-full bg-emerald-500 flex items-center justify-center text-white font-bold text-xs ring-4 ring-surface">
             ✓
           </span>
         </div>
 
         {/* Title & Subtitle */}
         <div className="space-y-2">
-          <h1 className="text-2xl font-bold font-heading text-white">
+          <h1 className="text-2xl font-bold font-heading text-[#111111] dark:text-white">
             Interview Completed!
           </h1>
-          <p className="text-xs text-neutral-400 leading-relaxed max-w-xs mx-auto">
+          <p className="text-xs text-[#5E5B56] dark:text-neutral-400 leading-relaxed max-w-xs mx-auto">
             Great job finishing your practice session. AI engine has processed your responses and computed your candidate score.
           </p>
         </div>
 
         {/* Session Stats Badge */}
-        <div className="p-4 rounded-xl bg-[#0E0E10] border border-neutral-800/90 text-left space-y-2.5">
-          <div className="flex items-center justify-between text-xs pb-2 border-b border-neutral-800">
-            <span className="text-neutral-400">Target Role:</span>
-            <span className="font-bold text-white font-heading">
+        <div className="p-4 rounded-xl bg-[#FAF8F5] dark:bg-[#0E0E10] border border-[rgba(0,0,0,0.08)] dark:border-neutral-800/90 text-left space-y-2.5">
+          <div className="flex items-center justify-between text-xs pb-2 border-b border-[rgba(0,0,0,0.08)] dark:border-neutral-800">
+            <span className="text-[#5E5B56] dark:text-neutral-400">Target Role:</span>
+            <span className="font-bold text-[#111111] dark:text-white font-heading">
               {interview?.targetRole || 'Software Engineer'}
             </span>
           </div>
 
-          <div className="flex items-center justify-between text-xs pb-2 border-b border-neutral-800">
-            <span className="text-neutral-400">Interview Type:</span>
+          <div className="flex items-center justify-between text-xs pb-2 border-b border-[rgba(0,0,0,0.08)] dark:border-neutral-800">
+            <span className="text-[#5E5B56] dark:text-neutral-400">Interview Type:</span>
             <span className="font-semibold text-[#C85232]">
               {interview?.interviewType || 'TECHNICAL'}
             </span>
           </div>
 
           <div className="flex items-center justify-between text-xs">
-            <span className="text-neutral-400">Questions Completed:</span>
-            <span className="font-mono text-emerald-400 font-bold">
+            <span className="text-[#5E5B56] dark:text-neutral-400">Questions Completed:</span>
+            <span className="font-mono text-emerald-600 dark:text-emerald-400 font-bold">
               {interview?.questionCount || 5} / {interview?.questionCount || 5}
             </span>
           </div>
@@ -94,7 +94,7 @@ export default function Complete() {
         <div className="space-y-3 pt-2">
           <button
             onClick={() => navigate(`/interview/report/${id}`)}
-            className="w-full py-3 px-4 rounded-xl text-xs font-bold text-white bg-[#C85232] hover:bg-[#b04328] shadow-lg flex items-center justify-center gap-2 transition-all"
+            className="w-full py-3 px-4 rounded-xl text-xs font-bold text-white bg-[#C85232] hover:bg-[#b04328] shadow-lg flex items-center justify-center gap-2 transition-all cursor-pointer"
           >
             <Sparkles size={16} />
             <span>View Full AI Performance Report</span>
@@ -104,13 +104,13 @@ export default function Complete() {
           <div className="grid grid-cols-2 gap-3">
             <button
               onClick={() => navigate('/interview/setup/role')}
-              className="py-2.5 px-3 rounded-xl text-xs font-semibold bg-neutral-800 hover:bg-neutral-700 text-neutral-300 border border-neutral-700 flex items-center justify-center gap-1.5 transition-all"
+              className="py-2.5 px-3 rounded-xl text-xs font-semibold bg-[#EAE6DF] dark:bg-neutral-800 hover:bg-[#E2DDD5] dark:hover:bg-neutral-700 text-[#111111] dark:text-neutral-300 border border-[rgba(0,0,0,0.08)] dark:border-neutral-700 flex items-center justify-center gap-1.5 transition-all cursor-pointer"
             >
               <RotateCcw size={14} /> Practice Again
             </button>
             <button
               onClick={() => navigate('/dashboard')}
-              className="py-2.5 px-3 rounded-xl text-xs font-semibold bg-neutral-800 hover:bg-neutral-700 text-neutral-300 border border-neutral-700 flex items-center justify-center gap-1.5 transition-all"
+              className="py-2.5 px-3 rounded-xl text-xs font-semibold bg-[#EAE6DF] dark:bg-neutral-800 hover:bg-[#E2DDD5] dark:hover:bg-neutral-700 text-[#111111] dark:text-neutral-300 border border-[rgba(0,0,0,0.08)] dark:border-neutral-700 flex items-center justify-center gap-1.5 transition-all cursor-pointer"
             >
               <Home size={14} /> Dashboard
             </button>

@@ -50,6 +50,9 @@ public class SecurityAndAuthorizationIntegrationTest {
     private AuthService authService;
 
     @MockBean
+    private UserService userService;
+
+    @MockBean
     private ResumeService resumeService;
 
     @MockBean
@@ -215,7 +218,7 @@ public class SecurityAndAuthorizationIntegrationTest {
                     .college("A Institute of Technology")
                     .build();
 
-            when(authService.getUserProfile(1L)).thenReturn(profileA);
+            when(userService.getUserProfile(1L)).thenReturn(profileA);
 
             mockMvc.perform(get("/api/users/profile")
                             .with(user(studentAPrincipal)))
@@ -225,8 +228,8 @@ public class SecurityAndAuthorizationIntegrationTest {
                     .andExpect(jsonPath("$.email").value("studentA@prepwise.com"))
                     .andExpect(jsonPath("$.college").value("A Institute of Technology"));
 
-            verify(authService).getUserProfile(1L);
-            verify(authService, never()).getUserProfile(2L);
+            verify(userService).getUserProfile(1L);
+            verify(userService, never()).getUserProfile(2L);
         }
     }
 
@@ -362,7 +365,7 @@ public class SecurityAndAuthorizationIntegrationTest {
                     .createdAt(LocalDateTime.now())
                     .build();
 
-            when(authService.getUserProfile(1L)).thenReturn(profileResponse);
+            when(userService.getUserProfile(1L)).thenReturn(profileResponse);
 
             mockMvc.perform(get("/api/users/profile")
                             .with(user(studentAPrincipal)))

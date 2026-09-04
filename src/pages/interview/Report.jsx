@@ -146,22 +146,22 @@ export default function Report() {
   const questionsList = report.questionFeedback || report.questions || [];
 
   return (
-    <div className="min-h-screen bg-[#0E0E10] text-[#E4E4E7] py-8 px-4 sm:px-6 lg:px-8 font-body selection:bg-[#C85232]/30 selection:text-white">
+    <div className="min-h-screen bg-canvas text-[#111111] dark:text-[#E4E4E7] py-8 px-4 sm:px-6 lg:px-8 font-body selection:bg-[#C85232]/30 selection:text-white">
       <div className="max-w-5xl mx-auto space-y-8">
         {/* TOP HEADER & BREADCRUMBS */}
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 border-b border-neutral-800 pb-6">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 border-b border-[rgba(0,0,0,0.08)] dark:border-neutral-800 pb-6">
           <div>
-            <div className="flex items-center gap-2 text-xs text-neutral-400 mb-2 font-mono">
-              <Link to="/dashboard" className="hover:text-white transition-all">Dashboard</Link>
+            <div className="flex items-center gap-2 text-xs text-[#5E5B56] dark:text-neutral-400 mb-2 font-mono">
+              <Link to="/dashboard" className="hover:text-[#111111] dark:hover:text-white transition-all">Dashboard</Link>
               <span>/</span>
-              <Link to="/interview/history" className="hover:text-white transition-all">Interview History</Link>
+              <Link to="/interview/history" className="hover:text-[#111111] dark:hover:text-white transition-all">Interview History</Link>
               <span>/</span>
               <span className="text-[#C85232] font-semibold">Report #{id}</span>
             </div>
-            <h1 className="text-2xl sm:text-3xl font-bold font-heading text-white flex items-center gap-3">
+            <h1 className="text-2xl sm:text-3xl font-bold font-heading text-[#111111] dark:text-white flex items-center gap-3">
               AI Evaluation & Feedback Summary
             </h1>
-            <p className="text-xs sm:text-sm text-neutral-400 mt-1">
+            <p className="text-xs sm:text-sm text-[#5E5B56] dark:text-neutral-400 mt-1">
               {interview?.targetRole || 'Target Role Practice Session'} •{' '}
               {interview?.companyName || 'General Practice'} • Completed Just Now
             </p>
@@ -170,13 +170,13 @@ export default function Report() {
           <div className="flex items-center gap-3 shrink-0">
             <button
               onClick={() => navigate('/interview/history')}
-              className="px-4 py-2 rounded-xl text-xs font-semibold bg-neutral-800 hover:bg-neutral-700 text-neutral-200 border border-neutral-700 transition-all flex items-center gap-1.5"
+              className="px-4 py-2 rounded-xl text-xs font-semibold bg-[#EAE6DF] dark:bg-neutral-800 hover:bg-[#E2DDD5] dark:hover:bg-neutral-700 text-[#111111] dark:text-neutral-200 border border-[rgba(0,0,0,0.08)] dark:border-neutral-700 transition-all flex items-center gap-1.5 cursor-pointer"
             >
               <BarChart3 size={15} /> All Sessions
             </button>
             <button
               onClick={() => navigate('/interview/setup/role')}
-              className="px-5 py-2 rounded-xl text-xs font-bold bg-[#C85232] hover:bg-[#b04328] text-white shadow-lg transition-all flex items-center gap-1.5"
+              className="px-5 py-2 rounded-xl text-xs font-bold bg-[#C85232] hover:bg-[#b04328] text-white shadow-lg transition-all flex items-center gap-1.5 cursor-pointer"
             >
               <RotateCcw size={15} /> Practice Again
             </button>
@@ -186,10 +186,10 @@ export default function Report() {
         {/* OVERALL SCORE & SUB-METRICS HERO SECTION */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
           {/* PRIMARY OVERALL SCORE INDICATOR (5 cols) */}
-          <div className="lg:col-span-5 bg-[#161619] border border-neutral-800 rounded-2xl p-6 flex flex-col items-center justify-center text-center relative overflow-hidden shadow-xl">
+          <div className="lg:col-span-5 bg-surface border border-[rgba(0,0,0,0.08)] dark:border-neutral-800 rounded-2xl p-6 flex flex-col items-center justify-center text-center relative overflow-hidden shadow-xs">
             <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[#C85232] to-transparent" />
 
-            <div className="text-xs uppercase font-bold tracking-wider text-neutral-400 mb-4 flex items-center gap-1.5">
+            <div className="text-xs uppercase font-bold tracking-wider text-[#5E5B56] dark:text-neutral-400 mb-4 flex items-center gap-1.5">
               <Sparkles size={14} className="text-[#C85232]" /> Overall Performance Score
             </div>
 
@@ -200,7 +200,8 @@ export default function Report() {
                   cx="50"
                   cy="50"
                   r="42"
-                  stroke="#27272A"
+                  stroke="currentColor"
+                  className="text-[#EAE6DF] dark:text-[#27272A]"
                   strokeWidth="8"
                   fill="transparent"
                 />
@@ -218,10 +219,10 @@ export default function Report() {
                 />
               </svg>
               <div className="absolute inset-0 flex flex-col items-center justify-center">
-                <span className="text-4xl font-extrabold font-heading text-white">
+                <span className="text-4xl font-extrabold font-heading text-[#111111] dark:text-white">
                   {overallScore}
                 </span>
-                <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest">
+                <span className="text-[10px] font-bold text-[#5E5B56] dark:text-neutral-400 uppercase tracking-widest">
                   / 100
                 </span>
               </div>
@@ -237,14 +238,14 @@ export default function Report() {
               </span>
             </div>
 
-            <p className="text-xs text-neutral-400 mt-3 leading-relaxed max-w-xs">
+            <p className="text-xs text-[#5E5B56] dark:text-neutral-400 mt-3 leading-relaxed max-w-xs">
               Based on AI analysis across technical accuracy, problem formulation, and communication clarity.
             </p>
           </div>
 
           {/* SUB-SCORE PROGRESS BARS (7 cols) */}
-          <div className="lg:col-span-7 bg-[#161619] border border-neutral-800 rounded-2xl p-6 flex flex-col justify-between shadow-xl space-y-5">
-            <h3 className="text-sm font-bold font-heading text-white flex items-center gap-2">
+          <div className="lg:col-span-7 bg-surface border border-[rgba(0,0,0,0.08)] dark:border-neutral-800 rounded-2xl p-6 flex flex-col justify-between shadow-xs space-y-5">
+            <h3 className="text-sm font-bold font-heading text-[#111111] dark:text-white flex items-center gap-2">
               <Brain size={16} className="text-[#C85232]" /> Skill Breakdown Metrics
             </h3>
 
@@ -252,12 +253,12 @@ export default function Report() {
               {/* Technical Knowledge */}
               <div>
                 <div className="flex justify-between text-xs mb-1.5">
-                  <span className="font-semibold text-neutral-200 flex items-center gap-1.5">
-                    <Zap size={14} className="text-amber-400" /> Technical Knowledge
+                  <span className="font-semibold text-[#111111] dark:text-neutral-200 flex items-center gap-1.5">
+                    <Zap size={14} className="text-amber-500" /> Technical Knowledge
                   </span>
-                  <span className="font-bold text-white font-mono">{techScore}%</span>
+                  <span className="font-bold text-[#111111] dark:text-white font-mono">{techScore}%</span>
                 </div>
-                <div className="w-full bg-neutral-800 h-2.5 rounded-full overflow-hidden">
+                <div className="w-full bg-[#EAE6DF] dark:bg-neutral-800 h-2.5 rounded-full overflow-hidden">
                   <div
                     className="bg-[#C85232] h-full rounded-full transition-all duration-700"
                     style={{ width: `${techScore}%` }}
@@ -268,12 +269,12 @@ export default function Report() {
               {/* Problem Solving */}
               <div>
                 <div className="flex justify-between text-xs mb-1.5">
-                  <span className="font-semibold text-neutral-200 flex items-center gap-1.5">
-                    <Target size={14} className="text-blue-400" /> Problem Solving & Logic
+                  <span className="font-semibold text-[#111111] dark:text-neutral-200 flex items-center gap-1.5">
+                    <Target size={14} className="text-blue-500" /> Problem Solving & Logic
                   </span>
-                  <span className="font-bold text-white font-mono">{problemScore}%</span>
+                  <span className="font-bold text-[#111111] dark:text-white font-mono">{problemScore}%</span>
                 </div>
-                <div className="w-full bg-neutral-800 h-2.5 rounded-full overflow-hidden">
+                <div className="w-full bg-[#EAE6DF] dark:bg-neutral-800 h-2.5 rounded-full overflow-hidden">
                   <div
                     className="bg-emerald-500 h-full rounded-full transition-all duration-700"
                     style={{ width: `${problemScore}%` }}
@@ -284,23 +285,23 @@ export default function Report() {
               {/* Answer Quality & Structure */}
               <div>
                 <div className="flex justify-between text-xs mb-1.5">
-                  <span className="font-semibold text-neutral-200 flex items-center gap-1.5">
-                    <MessageSquare size={14} className="text-purple-400" /> Answer Quality & Clarity
+                  <span className="font-semibold text-[#111111] dark:text-neutral-200 flex items-center gap-1.5">
+                    <MessageSquare size={14} className="text-purple-500" /> Answer Quality & Clarity
                   </span>
-                  <span className="font-bold text-white font-mono">{qualityScore}%</span>
+                  <span className="font-bold text-[#111111] dark:text-white font-mono">{qualityScore}%</span>
                 </div>
-                <div className="w-full bg-neutral-800 h-2.5 rounded-full overflow-hidden">
+                <div className="w-full bg-[#EAE6DF] dark:bg-neutral-800 h-2.5 rounded-full overflow-hidden">
                   <div
-                    className="bg-sky-400 h-full rounded-full transition-all duration-700"
+                    className="bg-sky-500 h-full rounded-full transition-all duration-700"
                     style={{ width: `${qualityScore}%` }}
                   />
                 </div>
               </div>
             </div>
 
-            <div className="p-3 rounded-xl bg-neutral-900/80 border border-neutral-800 text-xs text-neutral-400 flex items-center justify-between">
+            <div className="p-3 rounded-xl bg-[#FAF8F5] dark:bg-neutral-900/80 border border-[rgba(0,0,0,0.06)] dark:border-neutral-800 text-xs text-[#5E5B56] dark:text-neutral-400 flex items-center justify-between">
               <span>Target Role Benchmark: <strong>75%</strong></span>
-              <span className="text-emerald-400 font-semibold flex items-center gap-1">
+              <span className="text-emerald-600 dark:text-emerald-400 font-semibold flex items-center gap-1">
                 <TrendingUp size={14} /> +{overallScore - 75 > 0 ? overallScore - 75 : 0}% Above Baseline
               </span>
             </div>
@@ -310,8 +311,8 @@ export default function Report() {
         {/* STRENGTHS & AREAS TO IMPROVE GRID */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* STRENGTHS LIST */}
-          <div className="bg-[#161619] border border-neutral-800 rounded-2xl p-6 space-y-4 shadow-xl">
-            <div className="flex items-center gap-2 text-emerald-400 font-bold font-heading text-base">
+          <div className="bg-surface border border-[rgba(0,0,0,0.08)] dark:border-neutral-800 rounded-2xl p-6 space-y-4 shadow-xs">
+            <div className="flex items-center gap-2 text-emerald-600 dark:text-emerald-400 font-bold font-heading text-base">
               <div className="w-7 h-7 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center shrink-0">
                 <CheckCircle2 size={18} />
               </div>
@@ -322,9 +323,9 @@ export default function Report() {
               {strengths.map((item, idx) => (
                 <li
                   key={idx}
-                  className="p-3 rounded-xl bg-neutral-900/80 border border-neutral-800 text-xs text-neutral-200 flex items-start gap-3 leading-relaxed"
+                  className="p-3 rounded-xl bg-[#FAF8F5] dark:bg-neutral-900/80 border border-[rgba(0,0,0,0.06)] dark:border-neutral-800 text-xs text-[#111111] dark:text-neutral-200 flex items-start gap-3 leading-relaxed"
                 >
-                  <span className="text-emerald-400 font-bold shrink-0 mt-0.5">✓</span>
+                  <span className="text-emerald-600 dark:text-emerald-400 font-bold shrink-0 mt-0.5">✓</span>
                   <span>{item}</span>
                 </li>
               ))}
@@ -332,7 +333,7 @@ export default function Report() {
           </div>
 
           {/* AREAS TO IMPROVE LIST */}
-          <div className="bg-[#161619] border border-neutral-800 rounded-2xl p-6 space-y-4 shadow-xl">
+          <div className="bg-surface border border-[rgba(0,0,0,0.08)] dark:border-neutral-800 rounded-2xl p-6 space-y-4 shadow-xs">
             <div className="flex items-center gap-2 text-[#C85232] font-bold font-heading text-base">
               <div className="w-7 h-7 rounded-lg bg-[#C85232]/10 border border-[#C85232]/20 flex items-center justify-center shrink-0">
                 <AlertTriangle size={18} />
@@ -344,7 +345,7 @@ export default function Report() {
               {areasToImprove.map((item, idx) => (
                 <li
                   key={idx}
-                  className="p-3 rounded-xl bg-neutral-900/80 border border-neutral-800 text-xs text-neutral-200 flex items-start gap-3 leading-relaxed"
+                  className="p-3 rounded-xl bg-[#FAF8F5] dark:bg-neutral-900/80 border border-[rgba(0,0,0,0.06)] dark:border-neutral-800 text-xs text-[#111111] dark:text-neutral-200 flex items-start gap-3 leading-relaxed"
                 >
                   <span className="text-[#C85232] font-bold shrink-0 mt-0.5">!</span>
                   <span>{item}</span>
@@ -356,12 +357,12 @@ export default function Report() {
 
         {/* QUESTION-BY-QUESTION DEEP DIVE */}
         {questionsList.length > 0 && (
-          <div className="bg-[#161619] border border-neutral-800 rounded-2xl p-6 space-y-5 shadow-xl">
-            <div className="flex items-center justify-between border-b border-neutral-800 pb-4">
-              <h3 className="text-base font-bold font-heading text-white flex items-center gap-2">
+          <div className="bg-surface border border-[rgba(0,0,0,0.08)] dark:border-neutral-800 rounded-2xl p-6 space-y-5 shadow-xs">
+            <div className="flex items-center justify-between border-b border-[rgba(0,0,0,0.08)] dark:border-neutral-800 pb-4">
+              <h3 className="text-base font-bold font-heading text-[#111111] dark:text-white flex items-center gap-2">
                 <FileText size={18} className="text-[#C85232]" /> Question Breakdown & AI Feedback
               </h3>
-              <span className="text-xs text-neutral-400 font-mono">
+              <span className="text-xs text-[#5E5B56] dark:text-neutral-400 font-mono">
                 {questionsList.length} Questions Evaluated
               </span>
             </div>
@@ -372,21 +373,21 @@ export default function Report() {
                 return (
                   <div
                     key={idx}
-                    className="border border-neutral-800 rounded-xl overflow-hidden bg-[#0E0E10] transition-all"
+                    className="border border-[rgba(0,0,0,0.08)] dark:border-neutral-800 rounded-xl overflow-hidden bg-[#FAF8F5] dark:bg-[#0E0E10] transition-all"
                   >
                     <button
                       onClick={() => setExpandedQuestion(isExpanded ? null : idx)}
-                      className="w-full p-4 text-left flex items-center justify-between gap-4 hover:bg-neutral-900/50 transition-all"
+                      className="w-full p-4 text-left flex items-center justify-between gap-4 hover:bg-[#EAE6DF]/60 dark:hover:bg-neutral-900/50 transition-all cursor-pointer"
                     >
                       <div className="flex items-center gap-3">
-                        <span className="w-7 h-7 rounded-lg bg-neutral-800 text-neutral-300 font-mono text-xs font-bold flex items-center justify-center shrink-0">
+                        <span className="w-7 h-7 rounded-lg bg-[#EAE6DF] dark:bg-neutral-800 text-[#111111] dark:text-neutral-300 font-mono text-xs font-bold flex items-center justify-center shrink-0">
                           Q{idx + 1}
                         </span>
                         <div>
-                          <h4 className="text-sm font-semibold text-white line-clamp-1">
+                          <h4 className="text-sm font-semibold text-[#111111] dark:text-white line-clamp-1">
                             {q.questionText}
                           </h4>
-                          <span className="text-[11px] text-neutral-400">
+                          <span className="text-[11px] text-[#5E5B56] dark:text-neutral-400">
                             Score: <strong className="text-[#C85232]">{q.score || 80}/100</strong>
                           </span>
                         </div>
@@ -396,8 +397,8 @@ export default function Report() {
                         <span
                           className={`px-2 py-0.5 rounded text-[10px] font-bold ${
                             (q.score || 80) >= 80
-                              ? 'bg-emerald-500/20 text-emerald-400'
-                              : 'bg-amber-500/20 text-amber-300'
+                              ? 'bg-emerald-500/20 text-emerald-600 dark:text-emerald-400'
+                              : 'bg-amber-500/20 text-amber-600 dark:text-amber-300'
                           }`}
                         >
                           {(q.score || 80) >= 80 ? 'STRONG' : 'NEEDS REFINEMENT'}
@@ -407,34 +408,34 @@ export default function Report() {
                     </button>
 
                     {isExpanded && (
-                      <div className="p-4 border-t border-neutral-800 bg-[#121215] space-y-3 text-xs">
+                      <div className="p-4 border-t border-[rgba(0,0,0,0.08)] dark:border-neutral-800 bg-[#EFECE6] dark:bg-[#121215] space-y-3 text-xs">
                         {/* Candidate Answer */}
                         <div>
-                          <span className="text-[11px] font-bold uppercase text-neutral-400 block mb-1">
+                          <span className="text-[11px] font-bold uppercase text-[#5E5B56] dark:text-neutral-400 block mb-1">
                             Your Answer:
                           </span>
-                          <div className="p-3 rounded-lg bg-[#0E0E10] border border-neutral-800 text-neutral-200 leading-relaxed font-mono">
+                          <div className="p-3 rounded-lg bg-white dark:bg-[#0E0E10] border border-[rgba(0,0,0,0.08)] dark:border-neutral-800 text-[#111111] dark:text-neutral-200 leading-relaxed font-mono">
                             {q.userAnswer || 'No response provided.'}
                           </div>
                         </div>
 
                         {/* AI Feedback */}
                         {q.feedback && (
-                          <div className="p-3 rounded-lg bg-[#C85232]/10 border border-[#C85232]/30 text-neutral-200 space-y-1">
+                          <div className="p-3 rounded-lg bg-[#C85232]/10 border border-[#C85232]/30 text-[#111111] dark:text-neutral-200 space-y-1">
                             <span className="font-bold text-[#C85232] block flex items-center gap-1.5">
                               <Sparkles size={14} /> AI Evaluator Analysis:
                             </span>
-                            <p className="leading-relaxed text-neutral-300">{q.feedback}</p>
+                            <p className="leading-relaxed text-[#2A2A2A] dark:text-neutral-300">{q.feedback}</p>
                           </div>
                         )}
 
                         {/* Model Ideal Answer */}
                         {q.modelAnswer && (
                           <div>
-                            <span className="text-[11px] font-bold uppercase text-neutral-400 block mb-1">
+                            <span className="text-[11px] font-bold uppercase text-[#5E5B56] dark:text-neutral-400 block mb-1">
                               Ideal Senior Answer Model:
                             </span>
-                            <div className="p-3 rounded-lg bg-emerald-500/5 border border-emerald-500/20 text-emerald-200 leading-relaxed">
+                            <div className="p-3 rounded-lg bg-emerald-500/5 border border-emerald-500/20 text-emerald-800 dark:text-emerald-200 leading-relaxed">
                               {q.modelAnswer}
                             </div>
                           </div>
@@ -450,8 +451,8 @@ export default function Report() {
 
         {/* STRATEGIC RECOMMENDATIONS & ACTION ITEMS */}
         {report.recommendations && report.recommendations.length > 0 && (
-          <div className="bg-[#161619] border border-neutral-800 rounded-2xl p-6 space-y-4 shadow-xl">
-            <h3 className="text-base font-bold font-heading text-white flex items-center gap-2">
+          <div className="bg-surface border border-[rgba(0,0,0,0.08)] dark:border-neutral-800 rounded-2xl p-6 space-y-4 shadow-xs">
+            <h3 className="text-base font-bold font-heading text-[#111111] dark:text-white flex items-center gap-2">
               <BookOpen size={18} className="text-[#C85232]" /> Next Action Plan
             </h3>
 
@@ -459,9 +460,9 @@ export default function Report() {
               {report.recommendations.map((rec, i) => (
                 <div
                   key={i}
-                  className="p-4 rounded-xl bg-neutral-900/80 border border-neutral-800 flex flex-col justify-between space-y-3"
+                  className="p-4 rounded-xl bg-[#FAF8F5] dark:bg-neutral-900/80 border border-[rgba(0,0,0,0.06)] dark:border-neutral-800 flex flex-col justify-between space-y-3"
                 >
-                  <p className="text-xs text-neutral-300 leading-relaxed">{rec}</p>
+                  <p className="text-xs text-[#2A2A2A] dark:text-neutral-300 leading-relaxed">{rec}</p>
                   <Link
                     to="/placement"
                     className="text-xs font-bold text-[#C85232] hover:underline flex items-center gap-1"
@@ -475,12 +476,12 @@ export default function Report() {
         )}
 
         {/* BOTTOM ACTION CTA BAR */}
-        <div className="p-6 rounded-2xl bg-gradient-to-r from-[#18181B] via-[#1F1F23] to-[#18181B] border border-neutral-800 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-2xl">
+        <div className="p-6 rounded-2xl bg-surface border border-[rgba(0,0,0,0.08)] dark:border-neutral-800 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-sm">
           <div>
-            <h4 className="text-sm font-bold text-white font-heading">
+            <h4 className="text-sm font-bold text-[#111111] dark:text-white font-heading">
               Ready to improve your interview percentile?
             </h4>
-            <p className="text-xs text-neutral-400">
+            <p className="text-xs text-[#5E5B56] dark:text-neutral-400">
               Launch a new targeted practice session or explore curated study roadmaps.
             </p>
           </div>
@@ -488,13 +489,13 @@ export default function Report() {
           <div className="flex items-center gap-3 w-full sm:w-auto">
             <button
               onClick={() => navigate('/dashboard')}
-              className="flex-1 sm:flex-none px-4 py-2.5 rounded-xl text-xs font-semibold bg-neutral-800 hover:bg-neutral-700 text-neutral-300 border border-neutral-700 transition-all text-center"
+              className="flex-1 sm:flex-none px-4 py-2.5 rounded-xl text-xs font-semibold bg-[#EAE6DF] dark:bg-neutral-800 hover:bg-[#E2DDD5] dark:hover:bg-neutral-700 text-[#111111] dark:text-neutral-300 border border-[rgba(0,0,0,0.08)] dark:border-neutral-700 transition-all text-center cursor-pointer"
             >
               Back to Dashboard
             </button>
             <button
               onClick={() => navigate('/interview/setup/role')}
-              className="flex-1 sm:flex-none px-6 py-2.5 rounded-xl text-xs font-bold bg-[#C85232] hover:bg-[#b04328] text-white shadow-lg transition-all text-center flex items-center justify-center gap-2"
+              className="flex-1 sm:flex-none px-6 py-2.5 rounded-xl text-xs font-bold bg-[#C85232] hover:bg-[#b04328] text-white shadow-lg transition-all text-center flex items-center justify-center gap-2 cursor-pointer"
             >
               <span>New Interview</span>
               <ArrowRight size={14} />

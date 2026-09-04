@@ -13,10 +13,10 @@ spring:
   application:
     name: prepwise-backend
   datasource:
-    url: ${SPRING_DATASOURCE_URL:${DATABASE_URL:jdbc:mysql://${DB_HOST}:${DB_PORT:3306}/${DB_NAME}?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC}}
-    username: ${SPRING_DATASOURCE_USERNAME:${DB_USERNAME}}
-    password: ${SPRING_DATASOURCE_PASSWORD:${DB_PASSWORD}}
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${SPRING_DATASOURCE_URL:${DATABASE_URL:jdbc:postgresql://${DB_HOST:aws-0-ap-northeast-1.pooler.supabase.com}:${DB_PORT:5432}/${DB_NAME:postgres}${DB_SSLMODE:?sslmode=require}}}
+    username: ${SPRING_DATASOURCE_USERNAME:${DB_USERNAME:postgres.vmcswtsywmbkvykepwpv}}
+    password: ${SPRING_DATASOURCE_PASSWORD:${DB_PASSWORD:}}
+    driver-class-name: org.postgresql.Driver
     hikari:
       maximum-pool-size: ${DB_POOL_MAX_SIZE:10}
       minimum-idle: ${DB_POOL_MIN_IDLE:2}
@@ -30,7 +30,7 @@ spring:
     properties:
       hibernate:
         format_sql: false
-        dialect: org.hibernate.dialect.MySQLDialect
+        dialect: org.hibernate.dialect.PostgreSQLDialect
 
 jwt:
   secret: ${JWT_SECRET}
@@ -39,9 +39,10 @@ jwt:
 ai:
   provider: ${AI_PROVIDER:groq}
   api-key: ${GROQ_API_KEY:${AI_API_KEY:}}
-  model: ${GROQ_MODEL:${AI_MODEL:qwen/qwen3.8-27b}}
+  model: ${GROQ_MODEL:${AI_MODEL:qwen/qwen3.6-27b}}
   fallback-model: ${AI_FALLBACK_MODEL:qwen/qwen3.8-27b}
-  api-base-url: ${AI_SERVICE_URL:https://api.groq.com/openai/v1}
+  max-tokens: ${AI_MAX_TOKENS:1000}
+  api-base-url: ${AI_SERVICE_URL:${AI_API_BASE_URL:https://api.groq.com/openai/v1}}
 
 file-storage:
   type: ${FILE_STORAGE_TYPE:local}

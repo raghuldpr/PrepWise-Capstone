@@ -228,4 +228,18 @@ class AuthServiceTest {
         assertThat(response.getCollege()).isEqualTo("Tech University");
         assertThat(response.getTargetRole()).isEqualTo("Software Engineer");
     }
+
+    @Test
+    @DisplayName("verifySeededPassword: Spring BCryptPasswordEncoder correctly matches Password123! with seeded hash")
+    void verifySeededPasswordMatchesBcryptHash() {
+        org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder encoder = 
+                new org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder();
+        String seededHash = "$2b$10$9WCweUgaaWVUvZo7Qoj8A.dBbm3RaoHswGubGmVp0fxKE0qtCIUnG";
+        
+        boolean matches = encoder.matches("Password123!", seededHash);
+        assertThat(matches).isTrue();
+
+        boolean wrongMatches = encoder.matches("WrongPassword", seededHash);
+        assertThat(wrongMatches).isFalse();
+    }
 }

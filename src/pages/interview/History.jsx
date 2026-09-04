@@ -99,26 +99,26 @@ export default function History() {
   }
 
   return (
-    <div className="max-w-6xl mx-auto space-y-8 py-4 px-2 sm:px-4 font-body text-[#E4E4E7]">
+    <div className="max-w-6xl mx-auto space-y-8 py-4 px-2 sm:px-4 font-body text-[#111111] dark:text-[#E4E4E7]">
       {/* HEADER BAR */}
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 border-b border-neutral-800 pb-6">
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 border-b border-[rgba(0,0,0,0.08)] dark:border-neutral-800 pb-6">
         <div>
-          <div className="flex items-center gap-2 text-xs text-neutral-400 mb-1 font-mono">
-            <Link to="/dashboard" className="hover:text-white">Dashboard</Link>
+          <div className="flex items-center gap-2 text-xs text-[#5E5B56] dark:text-neutral-400 mb-1 font-mono">
+            <Link to="/dashboard" className="hover:text-[#111111] dark:hover:text-white">Dashboard</Link>
             <span>/</span>
             <span className="text-[#C85232]">Interview History</span>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-bold font-heading text-white flex items-center gap-3">
+          <h1 className="text-2xl sm:text-3xl font-bold font-heading text-[#111111] dark:text-white flex items-center gap-3">
             <BarChart2 size={28} className="text-[#C85232]" /> Past Interview Sessions
           </h1>
-          <p className="text-xs sm:text-sm text-neutral-400 mt-1">
+          <p className="text-xs sm:text-sm text-[#5E5B56] dark:text-neutral-400 mt-1">
             Track your AI mock interview performance scores, view detailed reports, and evaluate career readiness over time.
           </p>
         </div>
 
         <button
           onClick={() => navigate('/interview/setup/role')}
-          className="px-5 py-2.5 rounded-xl text-xs font-bold bg-[#C85232] hover:bg-[#b04328] text-white shadow-lg transition-all flex items-center justify-center gap-2 shrink-0"
+          className="px-5 py-2.5 rounded-xl text-xs font-bold bg-[#C85232] hover:bg-[#b04328] text-white shadow-lg transition-all flex items-center justify-center gap-2 shrink-0 cursor-pointer"
         >
           <Plus size={16} />
           <span>New Practice Session</span>
@@ -128,68 +128,68 @@ export default function History() {
       {/* STATS OVERVIEW CARDS */}
       {history.length > 0 && (
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <div className="bg-[#161619] border border-neutral-800 rounded-2xl p-5 space-y-2 shadow-lg">
-            <div className="text-xs text-neutral-400 uppercase font-bold tracking-wider flex items-center justify-between">
+          <div className="bg-surface border border-[rgba(0,0,0,0.08)] dark:border-neutral-800 rounded-2xl p-5 space-y-2 shadow-xs">
+            <div className="text-xs text-[#5E5B56] dark:text-neutral-400 uppercase font-bold tracking-wider flex items-center justify-between">
               <span>Total Sessions</span>
-              <BarChart2 size={16} className="text-neutral-500" />
+              <BarChart2 size={16} className="text-[#5E5B56] dark:text-neutral-500" />
             </div>
-            <div className="text-3xl font-extrabold font-heading text-white font-mono">
+            <div className="text-3xl font-extrabold font-heading text-[#111111] dark:text-white font-mono">
               {history.length}
             </div>
-            <p className="text-[11px] text-neutral-400">
+            <p className="text-[11px] text-[#5E5B56] dark:text-neutral-400">
               {completedSessions.length} completed, {history.length - completedSessions.length} in progress
             </p>
           </div>
 
-          <div className="bg-[#161619] border border-neutral-800 rounded-2xl p-5 space-y-2 shadow-lg">
-            <div className="text-xs text-neutral-400 uppercase font-bold tracking-wider flex items-center justify-between">
+          <div className="bg-surface border border-[rgba(0,0,0,0.08)] dark:border-neutral-800 rounded-2xl p-5 space-y-2 shadow-xs">
+            <div className="text-xs text-[#5E5B56] dark:text-neutral-400 uppercase font-bold tracking-wider flex items-center justify-between">
               <span>Average Score</span>
               <Award size={16} className="text-[#C85232]" />
             </div>
-            <div className="text-3xl font-extrabold font-heading text-white font-mono flex items-center gap-2">
+            <div className="text-3xl font-extrabold font-heading text-[#111111] dark:text-white font-mono flex items-center gap-2">
               <span className="text-[#C85232]">{averageScore > 0 ? averageScore : 'N/A'}</span>
-              {averageScore > 0 && <span className="text-xs text-neutral-400 font-sans font-normal">/ 100</span>}
+              {averageScore > 0 && <span className="text-xs text-[#5E5B56] dark:text-neutral-400 font-sans font-normal">/ 100</span>}
             </div>
-            <p className="text-[11px] text-neutral-400">Across completed technical sessions</p>
+            <p className="text-[11px] text-[#5E5B56] dark:text-neutral-400">Across completed technical sessions</p>
           </div>
 
-          <div className="bg-[#161619] border border-neutral-800 rounded-2xl p-5 space-y-2 shadow-lg">
-            <div className="text-xs text-neutral-400 uppercase font-bold tracking-wider flex items-center justify-between">
+          <div className="bg-surface border border-[rgba(0,0,0,0.08)] dark:border-neutral-800 rounded-2xl p-5 space-y-2 shadow-xs">
+            <div className="text-xs text-[#5E5B56] dark:text-neutral-400 uppercase font-bold tracking-wider flex items-center justify-between">
               <span>Score Trend</span>
-              <TrendingUp size={16} className="text-emerald-400" />
+              <TrendingUp size={16} className="text-emerald-500 dark:text-emerald-400" />
             </div>
-            <div className="text-3xl font-extrabold font-heading text-emerald-400 font-mono">
+            <div className="text-3xl font-extrabold font-heading text-emerald-600 dark:text-emerald-400 font-mono">
               +12%
             </div>
-            <p className="text-[11px] text-neutral-400">Improvement over last 5 sessions</p>
+            <p className="text-[11px] text-[#5E5B56] dark:text-neutral-400">Improvement over last 5 sessions</p>
           </div>
         </div>
       )}
 
       {/* SEARCH AND FILTER BAR */}
-      <div className="bg-[#161619] border border-neutral-800 rounded-2xl p-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div className="bg-surface border border-[rgba(0,0,0,0.08)] dark:border-neutral-800 rounded-2xl p-4 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-xs">
         {/* Search Input */}
         <div className="relative w-full sm:w-72">
-          <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-neutral-500" />
+          <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#5E5B56] dark:text-neutral-500" />
           <input
             type="text"
             placeholder="Search by role or company..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full bg-[#0E0E10] text-xs text-white pl-10 pr-4 py-2 rounded-xl border border-neutral-800 focus:outline-none focus:border-[#C85232] transition-all"
+            className="w-full bg-[#FAF8F5] dark:bg-[#0E0E10] text-xs text-[#111111] dark:text-white pl-10 pr-4 py-2 rounded-xl border border-[rgba(0,0,0,0.08)] dark:border-neutral-800 focus:outline-none focus:border-[#C85232] transition-all"
           />
         </div>
 
         {/* Type Filter Buttons */}
-        <div className="flex items-center gap-1 bg-[#0E0E10] p-1 rounded-xl border border-neutral-800 w-full sm:w-auto">
+        <div className="flex items-center gap-1 bg-[#FAF8F5] dark:bg-[#0E0E10] p-1 rounded-xl border border-[rgba(0,0,0,0.08)] dark:border-neutral-800 w-full sm:w-auto">
           {['ALL', 'TECHNICAL', 'BEHAVIORAL', 'SYSTEM_DESIGN', 'CODING'].map((type) => (
             <button
               key={type}
               onClick={() => setFilterType(type)}
-              className={`px-3 py-1.5 rounded-lg text-[11px] font-semibold transition-all ${
+              className={`px-3 py-1.5 rounded-lg text-[11px] font-semibold transition-all cursor-pointer ${
                 filterType === type
-                  ? 'bg-[#C85232] text-white shadow'
-                  : 'text-neutral-400 hover:text-white'
+                  ? 'bg-[#C85232] text-white shadow-xs'
+                  : 'text-[#5E5B56] dark:text-neutral-400 hover:text-[#111111] dark:hover:text-white'
               }`}
             >
               {type === 'ALL'
@@ -233,7 +233,7 @@ export default function History() {
             return (
               <div
                 key={session.id}
-                className="bg-[#161619] border border-neutral-800/90 hover:border-neutral-700 rounded-2xl p-5 transition-all shadow-md flex flex-col md:flex-row md:items-center justify-between gap-4"
+                className="bg-surface border border-[rgba(0,0,0,0.08)] dark:border-neutral-800/90 hover:border-neutral-400 dark:hover:border-neutral-700 rounded-2xl p-5 transition-all shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4"
               >
                 {/* Role Info & Badge */}
                 <div className="flex items-start gap-4">
@@ -243,19 +243,19 @@ export default function History() {
 
                   <div className="space-y-1">
                     <div className="flex items-center gap-2">
-                      <h3 className="text-sm font-bold font-heading text-white">
+                      <h3 className="text-sm font-bold font-heading text-[#111111] dark:text-white">
                         {session.targetRole || 'Software Engineering Role'}
                       </h3>
                       {session.companyName && (
-                        <span className="px-2 py-0.5 rounded bg-neutral-800 text-[10px] text-neutral-300 font-semibold border border-neutral-700">
+                        <span className="px-2 py-0.5 rounded bg-[#EAE6DF] dark:bg-neutral-800 text-[10px] text-[#111111] dark:text-neutral-300 font-semibold border border-[rgba(0,0,0,0.08)] dark:border-neutral-700">
                           {session.companyName}
                         </span>
                       )}
                     </div>
 
-                    <div className="flex flex-wrap items-center gap-3 text-xs text-neutral-400">
+                    <div className="flex flex-wrap items-center gap-3 text-xs text-[#5E5B56] dark:text-neutral-400">
                       <span className="flex items-center gap-1 font-mono">
-                        <Calendar size={12} className="text-neutral-500" />
+                        <Calendar size={12} className="text-[#5E5B56] dark:text-neutral-500" />
                         {session.createdAt
                           ? new Date(session.createdAt).toLocaleDateString()
                           : 'Recent Session'}
@@ -271,11 +271,11 @@ export default function History() {
                 </div>
 
                 {/* Score & Action Button */}
-                <div className="flex items-center justify-between md:justify-end gap-6 pt-3 md:pt-0 border-t md:border-t-0 border-neutral-800">
+                <div className="flex items-center justify-between md:justify-end gap-6 pt-3 md:pt-0 border-t md:border-t-0 border-[rgba(0,0,0,0.08)] dark:border-neutral-800">
                   {/* Score Tag */}
                   {isCompleted ? (
                     <div className="text-right">
-                      <div className="text-[10px] font-bold uppercase tracking-wider text-neutral-400">
+                      <div className="text-[10px] font-bold uppercase tracking-wider text-[#5E5B56] dark:text-neutral-400">
                         Score
                       </div>
                       <div className="text-xl font-extrabold font-mono text-[#C85232]">
@@ -283,7 +283,7 @@ export default function History() {
                       </div>
                     </div>
                   ) : (
-                    <span className="px-2.5 py-1 rounded-full bg-amber-500/10 text-amber-400 text-xs font-semibold border border-amber-500/20">
+                    <span className="px-2.5 py-1 rounded-full bg-amber-500/10 text-amber-600 dark:text-amber-400 text-xs font-semibold border border-amber-500/20">
                       In Progress
                     </span>
                   )}
@@ -292,7 +292,7 @@ export default function History() {
                   {isCompleted ? (
                     <button
                       onClick={() => navigate(`/interview/report/${session.id}`)}
-                      className="px-4 py-2 rounded-xl text-xs font-bold text-white bg-neutral-800 hover:bg-neutral-700 border border-neutral-700 hover:border-[#C85232] transition-all flex items-center gap-1.5"
+                      className="px-4 py-2 rounded-xl text-xs font-bold text-[#111111] dark:text-white bg-[#EAE6DF] dark:bg-neutral-800 hover:bg-[#E2DDD5] dark:hover:bg-neutral-700 border border-[rgba(0,0,0,0.1)] dark:border-neutral-700 hover:border-[#C85232] transition-all flex items-center gap-1.5 cursor-pointer"
                     >
                       <span>View Report</span>
                       <ArrowRight size={14} />
@@ -306,7 +306,7 @@ export default function History() {
                             : `/interview/session/${session.id}`
                         )
                       }
-                      className="px-4 py-2 rounded-xl text-xs font-bold text-white bg-[#C85232] hover:bg-[#b04328] transition-all flex items-center gap-1.5"
+                      className="px-4 py-2 rounded-xl text-xs font-bold text-white bg-[#C85232] hover:bg-[#b04328] transition-all flex items-center gap-1.5 cursor-pointer"
                     >
                       <Play size={12} fill="currentColor" />
                       <span>Resume Session</span>

@@ -45,3 +45,7 @@ pnpm-debug.log*
 # Application uploads & storage
 uploads/
 backend/uploads/
+
+# Scratch and temporary scripts
+scratch/
+.temp/

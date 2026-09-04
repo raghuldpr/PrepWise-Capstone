@@ -47,11 +47,14 @@ public class DefaultAIProviderClient implements AIProviderClient {
     @Value("${GROQ_API_KEY:}")
     private String groqApiKeyFallback;
 
-    @Value("${ai.model:${GROQ_MODEL:${AI_MODEL:qwen/qwen3.8-27b}}}")
+    @Value("${ai.model:${GROQ_MODEL:${AI_MODEL:qwen/qwen3.6-27b}}}")
     private String model;
 
     @Value("${ai.fallback-model:${AI_FALLBACK_MODEL:qwen/qwen3.8-27b}}")
     private String fallbackModel;
+
+    @Value("${ai.max-tokens:${AI_MAX_TOKENS:1000}}")
+    private int maxTokens;
 
     @Value("${ai.api-base-url:${AI_SERVICE_URL:${AI_API_BASE_URL:https://api.groq.com/openai/v1}}}")
     private String apiBaseUrl;
@@ -152,6 +155,11 @@ public class DefaultAIProviderClient implements AIProviderClient {
                     throw e;
                 }
             } catch (AIProviderUnavailableException e) {
+                // If model is unavailable (404) or auth failed (401/403), do not retry — fail immediately
+                if (e.getMessage() != null && (e.getMessage().contains("unavailable") || e.getMessage().contains("authentication failed") || e.getMessage().contains("missing"))) {
+                    log.error("AI Provider non-retryable error for model {}: {}", targetModel, e.getMessage());
+                    throw e;
+                }
                 if (attempt < maxRetries) {
                     log.warn("AI Provider error (Attempt {}/{}). Retrying in {} ms...", attempt, maxRetries, waitTimeMs);
                     try { Thread.sleep(waitTimeMs); } catch (InterruptedException ie) { Thread.currentThread().interrupt(); throw e; }
@@ -167,11 +175,11 @@ public class DefaultAIProviderClient implements AIProviderClient {
                     waitTimeMs *= 2;
                 } else {
                     log.error("AI call failed after {} attempts: {}", maxRetries, e.getMessage());
-                    throw new AIProviderUnavailableException("AI Service Temporarily Unavailable — Please try again in a few moments.", e);
+                    throw new AIProviderUnavailableException(e.getMessage() != null ? e.getMessage() : "AI Service Temporarily Unavailable — Please try again in a few moments.", e);
                 }
             }
         }
-        throw new AIProviderUnavailableException("AI Service Temporarily Unavailable — Please try again in a few moments.");
+        throw new AIProviderUnavailableException("AI Service Temporarily Unavailable for model: " + targetModel);
     }
 
     private String sendApiCall(String systemPrompt, String userPrompt, String effectiveKey, String targetModel) throws Exception {
@@ -218,6 +226,9 @@ public class DefaultAIProviderClient implements AIProviderClient {
 
             Map<String, Object> bodyMap = new HashMap<>();
             bodyMap.put("model", targetModel);
+            if (maxTokens > 0) {
+                bodyMap.put("max_tokens", maxTokens);
+            }
             List<Map<String, String>> messages = new ArrayList<>();
             if (systemPrompt != null && !systemPrompt.isBlank()) {
                 messages.add(Map.of("role", "system", "content", systemPrompt));
@@ -242,19 +253,23 @@ public class DefaultAIProviderClient implements AIProviderClient {
         int statusCode = response.statusCode();
         if (statusCode == 429) {
             Integer retryDelaySec = parseRetryDelaySeconds(response);
-            log.warn("AI Provider Rate Limit hit (HTTP 429) for model {}. Body: {}. Parsed retryDelay: {}s", targetModel, response.body(), retryDelaySec);
+            log.warn("Groq API Rate Limit hit (HTTP 429) for model {}. Body: {}. Parsed retryDelay: {}s", targetModel, response.body(), retryDelaySec);
             String msg = (retryDelaySec != null && retryDelaySec > 0)
-                    ? "AI service rate limit reached. Please try again in " + retryDelaySec + " seconds."
-                    : "AI provider quota or rate limit exceeded.";
+                    ? "Groq API rate limit exceeded. Please try again in " + retryDelaySec + " seconds."
+                    : "Groq API rate limit exceeded. Please try again shortly.";
             throw new AIQuotaExceededException(msg, retryDelaySec);
         }
+        if (statusCode == 404) {
+            log.error("Groq Model Not Found (HTTP 404) for model {}. Body: {}", targetModel, response.body());
+            throw new AIProviderUnavailableException("Configured Groq model is unavailable: " + targetModel);
+        }
         if (statusCode == 401 || statusCode == 403) {
-            log.error("AI Provider Auth Error (HTTP {}). Body: {}", statusCode, response.body());
-            throw new AIProviderUnavailableException("Invalid AI API key or unauthorized access.");
+            log.error("Groq API Auth Error (HTTP {}). Body: {}", statusCode, response.body());
+            throw new AIProviderUnavailableException("Groq API authentication failed. Please check GROQ_API_KEY.");
         }
         if (statusCode >= 400) {
-            log.error("AI Provider Error (HTTP {}). Body: {}", statusCode, response.body());
-            throw new RuntimeException("AI Provider returned HTTP status " + statusCode + ": " + response.body());
+            log.error("Groq API Error (HTTP {}). Body: {}", statusCode, response.body());
+            throw new AIProviderUnavailableException("Groq API request failed with HTTP " + statusCode + ": " + response.body());
         }
 
         JsonNode rootNode = objectMapper.readTree(response.body());
@@ -277,7 +292,17 @@ public class DefaultAIProviderClient implements AIProviderClient {
             contentText = textNode.asText();
         }
 
-        return contentText;
+        return stripThinkTags(contentText);
+    }
+
+    private String stripThinkTags(String text) {
+        if (text == null) return null;
+        if (text.contains("</think>")) {
+            int idx = text.lastIndexOf("</think>");
+            String clean = text.substring(idx + "</think>".length()).trim();
+            return clean.isEmpty() ? text : clean;
+        }
+        return text;
     }
 
     private Integer parseRetryDelaySeconds(HttpResponse<String> response) {
@@ -342,9 +367,10 @@ public class DefaultAIProviderClient implements AIProviderClient {
     }
 
     private String getEffectiveApiKey() {
-        String key = apiKey != null && !apiKey.isBlank() ? apiKey : groqApiKeyFallback;
-        if (key == null || key.isBlank() || key.contains("your_") || key.equals("MY_GROQ_API_KEY") || key.equals("MY_GEMINI_API_KEY")) {
-            throw new AIProviderUnavailableException("AI API Key is missing or not configured.");
+        String key = (apiKey != null && !apiKey.isBlank()) ? apiKey : groqApiKeyFallback;
+
+        if (key == null || key.isBlank() || key.contains("your_") || key.equals("MY_GROQ_API_KEY")) {
+            throw new AIProviderUnavailableException("Groq API Key is missing or not configured. Please set GROQ_API_KEY in your environment.");
         }
         return key;
     }
@@ -381,6 +407,66 @@ public class DefaultAIProviderClient implements AIProviderClient {
             aiRequestRepository.save(aiRequest);
         } catch (Exception e) {
             log.error("Failed to save AI request log to database", e);
+        }
+    }
+
+    @Override
+    public String getModel() {
+        return model;
+    }
+
+    @Override
+    public String getProvider() {
+        return provider;
+    }
+
+    @Override
+    public boolean verifyModelAvailability() {
+        String effectiveKey = getEffectiveApiKey();
+        String targetModel = model;
+        try {
+            HttpClient httpClient = HttpClient.newBuilder()
+                    .connectTimeout(Duration.ofSeconds(timeoutSeconds))
+                    .build();
+
+            String baseUrlClean = apiBaseUrl.replaceAll("/+$", "");
+            String endpoint;
+            if (baseUrlClean.endsWith("/models")) {
+                endpoint = baseUrlClean + "/" + targetModel;
+            } else if (baseUrlClean.endsWith("/v1")) {
+                endpoint = baseUrlClean + "/models/" + targetModel;
+            } else {
+                endpoint = baseUrlClean + "/v1/models/" + targetModel;
+            }
+
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(endpoint))
+                    .header("Authorization", "Bearer " + effectiveKey)
+                    .header("User-Agent", "PrepWise-Backend/1.0")
+                    .timeout(Duration.ofSeconds(timeoutSeconds))
+                    .GET()
+                    .build();
+
+            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+            int status = response.statusCode();
+            if (status == 200) {
+                log.info("Groq model verified successfully: {}", targetModel);
+                return true;
+            } else if (status == 404) {
+                log.error("Groq model not found (HTTP 404): {}. Body: {}", targetModel, response.body());
+                throw new AIProviderUnavailableException("Configured Groq model is unavailable: " + targetModel);
+            } else if (status == 401 || status == 403) {
+                log.error("Groq auth error (HTTP {}). Body: {}", status, response.body());
+                throw new AIProviderUnavailableException("Groq API authentication failed. Please check GROQ_API_KEY.");
+            } else {
+                log.warn("Groq model check returned status {}. Body: {}", status, response.body());
+                return false;
+            }
+        } catch (AIProviderUnavailableException e) {
+            throw e;
+        } catch (Exception e) {
+            log.error("Failed to verify Groq model availability: {}", e.getMessage());
+            throw new AIProviderUnavailableException("Groq API request failed: " + e.getMessage(), e);
         }
     }
 }

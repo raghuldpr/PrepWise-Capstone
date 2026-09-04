@@ -119,11 +119,14 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(AIProviderUnavailableException.class)
     public ResponseEntity<ErrorResponse> handleAIProviderUnavailableException(
             AIProviderUnavailableException ex, HttpServletRequest request) {
+        String msg = (ex.getMessage() != null && !ex.getMessage().isBlank())
+                ? ex.getMessage()
+                : "AI Service Temporarily Unavailable — Please try again in a few moments.";
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .timestamp(LocalDateTime.now())
                 .status(HttpStatus.SERVICE_UNAVAILABLE.value())
                 .error(HttpStatus.SERVICE_UNAVAILABLE.getReasonPhrase())
-                .message("AI Service Temporarily Unavailable — Please try again in a few moments.")
+                .message(msg)
                 .path(request.getRequestURI())
                 .build();
         return new ResponseEntity<>(errorResponse, HttpStatus.SERVICE_UNAVAILABLE);

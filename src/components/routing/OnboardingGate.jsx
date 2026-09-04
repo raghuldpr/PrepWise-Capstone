@@ -20,8 +20,8 @@ export const OnboardingGate = () => {
     return <Navigate to="/onboarding/skills" replace />;
   }
 
-  // If onboarding is already completed, and user tries to navigate to /onboarding unless it's /onboarding/complete
-  if (isAuthenticated && user && user.onboardingCompleted && location.pathname.startsWith('/onboarding') && location.pathname !== '/onboarding/complete') {
+  // If onboarding is already completed, allow access to /onboarding/skills to manage skills, but redirect away from other onboarding steps
+  if (isAuthenticated && user && user.onboardingCompleted && location.pathname.startsWith('/onboarding') && location.pathname !== '/onboarding/complete' && location.pathname !== '/onboarding/skills') {
     return <Navigate to="/dashboard" replace />;
   }
 

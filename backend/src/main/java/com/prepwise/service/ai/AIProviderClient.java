@@ -20,4 +20,20 @@ public interface AIProviderClient {
      * Completes an AI request with system prompt, user prompt, feature name, and explicit target user.
      */
     String complete(String systemPrompt, String userPrompt, String feature, User user);
+
+    /**
+     * Returns the currently configured model ID.
+     */
+    String getModel();
+
+    /**
+     * Returns the active AI provider name (e.g. groq).
+     */
+    String getProvider();
+
+    /**
+     * Verifies that the configured model is available with the configured credentials.
+     * Throws an exception or returns false if unavailable.
+     */
+    boolean verifyModelAvailability();
 }
